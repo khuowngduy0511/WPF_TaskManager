@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace ToDo.Models
 {
-    internal class TaskCheckList
+    public class TaskCheckList
     {
+        public string Description { get; set; }
+        public bool IsComplete { get; set; }
+
     }
 }
