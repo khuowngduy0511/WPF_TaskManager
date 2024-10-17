@@ -20,6 +20,9 @@
     <!--Placeholder Text Color-->
     <SolidColorBrush x:Key="PlaceholderText" Color="#FF505050" />
     
+    <SolidColorBrush x:Key="PlaceholderBorder" Color="#FF949494" />
+    <SolidColorBrush x:Key="PlaceholderBorderText" Color="#FF373737" />
+
     <!--Button Color-->
     <SolidColorBrush x:Key="Button.Complete" Color="#FF57B1B6" />
     <SolidColorBrush x:Key="Button.Complete.Over" Color="#FF4B886B" />
@@ -60,4 +63,7 @@
     <SolidColorBrush x:Key="Progress-Archived" Color="#FFCBA36C" />
     
     <SolidColorBrush x:Key="Progress-Deleted" Color="#FF606060" />
+
+    <SolidColorBrush x:Key="TaskListDesText" Color="#FF838383" />
+    <SolidColorBrush x:Key="TaskListTitleText" Color="#FF707070" />
 </ResourceDictionary>   

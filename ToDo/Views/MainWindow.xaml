@@ -3,11 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:ToDo.ViewModels"
         xmlns:local="clr-namespace:ToDo"
         mc:Ignorable="d"
         MinWidth="1150" MinHeight="450"
         Title="MainWindow" Height="832" Width="1200">
-
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80" />
@@ -61,7 +64,8 @@
                     VerticalAlignment="Center"
                     Height="34"
                     Width="40"
-                    Margin="375,0,0,0">
+                    Margin="375,0,0,0"
+                    Command="{Binding iOpenNewWindowCommand}">
                 <!--Icon-->
                 <Viewbox Width="35" Height="30">
                     <Path Data="{StaticResource NewTaskIcon}" Fill="{StaticResource OnAccent}"/>
@@ -72,7 +76,7 @@
             <TextBox x:Name="TaskSearchBox"
                      Style="{StaticResource TaskListSearchBox}"
                      Grid.Row="1"
-                     Margin="20,10,20,10" TextChanged="TaskSearchBox_TextChanged"/>
+                     Margin="20,10,20,10"/>
 
             <Label IsHitTestVisible="False"
                    Content="Search Task..."
