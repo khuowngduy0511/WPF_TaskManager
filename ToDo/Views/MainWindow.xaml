@@ -5,27 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ToDo"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="1200">
+        MinWidth="1150" MinHeight="450"
+        Title="MainWindow" Height="832" Width="1200">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80" />
-            <ColumnDefinition Width="435" />
+            <ColumnDefinition Width="410.667" />
+            <ColumnDefinition Width="24.333"/>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="140" />
         </Grid.ColumnDefinitions>
 
         <!--Nav pane-->
         <Rectangle Fill="{StaticResource AccentDark}" />
+        <StackPanel Margin="10,15,10,10">
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
+                <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
+                    <Path Data="{StaticResource ListIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
+                </Viewbox>
+            </Button>
+
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
+                <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
+                    <Path Data="{StaticResource TickIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
+                </Viewbox>
+            </Button>
+
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
+                <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
+                    <Path Data="{StaticResource TimeIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
+                </Viewbox>
+            </Button>
+        </StackPanel>
         <!--Task List Background-->
         <Rectangle Fill="{StaticResource TaskListBackground}" 
-                   Grid.Column="1"/>
+                   Grid.Column="1" Grid.ColumnSpan="2"/>
         <!--Task List Grid-->
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
+                <RowDefinition Height="40*"/>
                 <RowDefinition Height="60"/>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="106*"/>
-                <RowDefinition Height="51*"/>
+                <RowDefinition Height="483*"/>
+                <RowDefinition Height="233*"/>
             </Grid.RowDefinitions>
             <!--Task Label-->
             <Label Style="{StaticResource Heading1}"
@@ -37,7 +59,7 @@
             <Button Style="{StaticResource RoundAccentButton}"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Height="40"
+                    Height="34"
                     Width="40"
                     Margin="375,0,0,0">
                 <!--Icon-->
@@ -50,7 +72,7 @@
             <TextBox x:Name="TaskSearchBox"
                      Style="{StaticResource TaskListSearchBox}"
                      Grid.Row="1"
-                     Margin="20,0,20,0"/>
+                     Margin="20,10,20,10" TextChanged="TaskSearchBox_TextChanged"/>
 
             <Label IsHitTestVisible="False"
                    Content="Search Task..."
@@ -83,7 +105,7 @@
         </Grid>
 
         <!--Task Viewer-->
-        <Grid Grid.Column="2">
+        <Grid Grid.Column="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="236"/>
                 <RowDefinition Height="1*"/>
@@ -172,6 +194,15 @@
 
         <!--Task Status Bar-->
         <Rectangle Fill="{StaticResource TaskStatusBackground}" 
-                   Grid.Column="3"/>
+                   Grid.Column="4"/>
+
+        <!--Task Status-->
+        <Grid Grid.Column="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="230" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="140" />
+            </Grid.RowDefinitions>
+        </Grid>
     </Grid>
 </Window>
