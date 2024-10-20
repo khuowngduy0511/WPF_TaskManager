@@ -179,11 +179,13 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Content="Delete"
-                        Margin="20 0 0 0"/>
+                        Margin="20 0 0 0"
+                        Command="{Binding IOpenDeleteWindowCommand}"/>
                 <Button Style="{StaticResource TaskViewEditButton}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Content="Edit"/>
+                        Content="Edit"
+                        Command="{Binding IOpenEditTaskWindowCommand}"/>
                 <Button Style="{StaticResource TaskViewCompleteButton}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"

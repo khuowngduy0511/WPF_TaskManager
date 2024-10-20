@@ -15,7 +15,8 @@ namespace ToDo.ViewModels
 
         public ICommand IOpenNewWindowCommand => new RelayCommand(OpenNewWindow);
         public ICommand IOpenSearchWindowCommand => new RelayCommand(OpenSearchWindow);
-
+        public ICommand IOpenDeleteWindowCommand => new RelayCommand(OpenDeleteTaskWindow);
+        public ICommand IOpenEditTaskWindowCommand => new RelayCommand(OpenEditTaskWindow);
         private void OpenNewWindow()
         {
             NewTaskWindow  newTaskWindow= new NewTaskWindow();
@@ -24,11 +25,19 @@ namespace ToDo.ViewModels
 
         private void OpenSearchWindow()
         {
-            // Mở cửa sổ tìm kiếm
             SearchWindow searchWindow = new SearchWindow();
-            searchWindow.ShowDialog(); // Hoặc Show() nếu bạn muốn cửa sổ không chặn
+            searchWindow.ShowDialog(); 
         }
-
+        private void OpenDeleteTaskWindow()
+        {
+            DeleteTaskWindow deleteTaskWindow = new DeleteTaskWindow();
+            deleteTaskWindow.ShowDialog(); 
+        }
+        private void OpenEditTaskWindow()
+        {
+            EditTaskWindow editTaskWindow = new EditTaskWindow();
+            editTaskWindow.ShowDialog(); 
+        }
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
