@@ -13,7 +13,8 @@ namespace ToDo.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ICommand iOpenNewWindowCommand => new RelayCommand(OpenNewWindow);
+        public ICommand IOpenNewWindowCommand => new RelayCommand(OpenNewWindow);
+        public ICommand IOpenSearchWindowCommand => new RelayCommand(OpenSearchWindow);
 
         private void OpenNewWindow()
         {
@@ -21,9 +22,16 @@ namespace ToDo.ViewModels
             newTaskWindow.Show();
         }
 
+        private void OpenSearchWindow()
+        {
+            // Mở cửa sổ tìm kiếm
+            SearchWindow searchWindow = new SearchWindow();
+            searchWindow.ShowDialog(); // Hoặc Show() nếu bạn muốn cửa sổ không chặn
+        }
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
+    }   
 }
