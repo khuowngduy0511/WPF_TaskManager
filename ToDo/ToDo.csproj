@@ -55,8 +55,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Views\CriticalWindow.xaml.cs">
+      <DependentUpon>CriticalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditWindow.xaml.cs">
+      <DependentUpon>EditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NewTaskWindow.xaml.cs">
       <DependentUpon>NewTaskWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SortTask.xaml.cs">
+      <DependentUpon>SortTask.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TaskListItern.xaml.cs">
       <DependentUpon>TaskListItern.xaml</DependentUpon>
@@ -70,6 +79,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dictionaries\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CriticalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -90,6 +107,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\NewTaskWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SortTask.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,29 @@
+﻿<Window x:Class="ToDo.Views.SortTask"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Sort Task" Height="300" Width="400">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
+        </Grid.ColumnDefinitions>
+        <!-- Title Section -->
+        <TextBlock Text="Task List" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" Margin="0,10,0,10" Width="64" />
+
+        <!-- DataGrid for Tasks -->
+        <DataGrid Name="taskDataGrid" AutoGenerateColumns="False" Margin="10,10,2,10" ItemsSource="{Binding Tasks}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Task Title" Binding="{Binding TaskTitle}" Width="*" />
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
+                <DataGridTextColumn Header="Due Day" Binding="{Binding DueDay}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Button Section -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,2,10" Height="30" Width="100"/>
+    </Grid>
+</Window>
