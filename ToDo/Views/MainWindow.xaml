@@ -10,77 +10,77 @@
         Top="0" Left="0"
         MinWidth="1150" MinHeight="450"
         Title="MainWindow" Height="832" Width="1200">
-    <Window.DataContext>
-        <vm:MainWindowViewModel/>
-    </Window.DataContext>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80" />
-            <ColumnDefinition Width="410.667" />
-            <ColumnDefinition Width="24.333"/>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="140" />
-        </Grid.ColumnDefinitions>
+	<Window.DataContext>
+		<vm:MainWindowViewModel/>
+	</Window.DataContext>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="80" />
+			<ColumnDefinition Width="410.667" />
+			<ColumnDefinition Width="24.333"/>
+			<ColumnDefinition Width="1*" />
+			<ColumnDefinition Width="140" />
+		</Grid.ColumnDefinitions>
 
-        <!--Nav pane-->
-        <Rectangle Fill="{StaticResource AccentDark}" />
-        <StackPanel Margin="10,15,10,10">
-            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
-                <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
-                    <Path Data="{StaticResource ListIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
-                </Viewbox>
-            </Button>
+		<!--Nav pane-->
+		<Rectangle Fill="{StaticResource AccentDark}" />
+		<StackPanel Margin="10,15,10,10">
+			<Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
+				<Viewbox Width="30" Height="30" Margin="7,6,8,-9">
+					<Path Data="{StaticResource ListIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
+				</Viewbox>
+			</Button>
 
-            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
-                <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
-                    <Path Data="{StaticResource TickIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
-                </Viewbox>
-            </Button>
+			<Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
+				<Viewbox Width="30" Height="30" Margin="7,6,8,-9">
+					<Path Data="{StaticResource TickIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
+				</Viewbox>
+			</Button>
 
-            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
-                <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
-                    <Path Data="{StaticResource TimeIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
-                </Viewbox>
-            </Button>
-        </StackPanel>
-        <!--Task List Background-->
-        <Rectangle Fill="{StaticResource TaskListBackground}" 
+			<Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
+				<Viewbox Width="30" Height="30" Margin="7,6,8,-9">
+					<Path Data="{StaticResource TimeIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
+				</Viewbox>
+			</Button>
+		</StackPanel>
+		<!--Task List Background-->
+		<Rectangle Fill="{StaticResource TaskListBackground}" 
                    Grid.Column="1" Grid.ColumnSpan="2"/>
-        <!--Task List Grid-->
-        <Grid Grid.Column="1" Grid.ColumnSpan="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="60*"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="483*"/>
-                <RowDefinition Height="233*"/>
-            </Grid.RowDefinitions>
-            <!--Task Label-->
-            <Label Style="{StaticResource Heading1}"
+		<!--Task List Grid-->
+		<Grid Grid.Column="1" Grid.ColumnSpan="2">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="60*"/>
+				<RowDefinition Height="40"/>
+				<RowDefinition Height="483*"/>
+				<RowDefinition Height="233*"/>
+			</Grid.RowDefinitions>
+			<!--Task Label-->
+			<Label Style="{StaticResource Heading1}"
                    Content="Tasks" 
                    VerticalAlignment="Center"
                    Padding="20 0 0 0 "
                    IsHitTestVisible="False"/>
-            <!--Add New Task Button-->
-            <Button Style="{StaticResource RoundAccentButton}"
+			<!--Add New Task Button-->
+			<Button Style="{StaticResource RoundAccentButton}"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Height="34"
                     Width="40"
                     Margin="375,0,0,0"
                     Command="{Binding IOpenNewWindowCommand}">
-                <!--Icon-->
-                <Viewbox Width="35" Height="30">
-                    <Path Data="{StaticResource NewTaskIcon}" Fill="{StaticResource OnAccent}"/>
-                </Viewbox>
-            </Button>
+				<!--Icon-->
+				<Viewbox Width="35" Height="30">
+					<Path Data="{StaticResource NewTaskIcon}" Fill="{StaticResource OnAccent}"/>
+				</Viewbox>
+			</Button>
 
-            <!--Search Button-->
-            <Border
+			<!--Search Button-->
+			<Border
                 Margin="319,10,65,10"
                 CornerRadius="20">
-                <Grid>
-                      
-                    <Button Style="{StaticResource SearchButton}"
+				<Grid>
+
+					<Button Style="{StaticResource SearchButton}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Width="40"
@@ -90,131 +90,131 @@
                 BorderBrush="Transparent"
                 Command="{Binding IOpenSearchWindowCommand}">
 
-                        <Viewbox Width="30" Height="30">
-                            <Path Data="{StaticResource SearchICon}" Fill="{StaticResource Borders}"/>
-                        </Viewbox>
-                    </Button>
-                </Grid>
-            </Border>
+						<Viewbox Width="30" Height="30">
+							<Path Data="{StaticResource SearchICon}" Fill="{StaticResource Borders}"/>
+						</Viewbox>
+					</Button>
+				</Grid>
+			</Border>
 
-            <!--List View For Task Item-->
-            <ListView Grid.Row="2"
+			<!--List View For Task Item-->
+			<ListView Grid.Row="2"
                       Background="Transparent"
                       Margin="0,20,0,20"
                       BorderBrush="Transparent" Grid.RowSpan="2">
-            </ListView>
+			</ListView>
 
-        </Grid>
+		</Grid>
 
-        <!--Task Viewer-->
-        <Grid Grid.Column="3">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="236"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="60"/>
-            </Grid.RowDefinitions>
-            <!--Task Details-->
-            <Grid Margin="20 0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="60"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="30"/>
-                </Grid.RowDefinitions>
+		<!--Task Viewer-->
+		<Grid Grid.Column="3">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="236"/>
+				<RowDefinition Height="1*"/>
+				<RowDefinition Height="60"/>
+			</Grid.RowDefinitions>
+			<!--Task Details-->
+			<Grid Margin="20 0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="60"/>
+					<RowDefinition Height="1*"/>
+					<RowDefinition Height="30"/>
+				</Grid.RowDefinitions>
 
-                <!--Task Title-->
-                <TextBlock Text="Task Title" 
+				<!--Task Title-->
+				<TextBlock Text="Task Title" 
            Style="{StaticResource Title}"
            VerticalAlignment="Center"/>
-                <!--Importance Badge-->
-                <Border HorizontalAlignment="Right"
+				<!--Importance Badge-->
+				<Border HorizontalAlignment="Right"
         VerticalAlignment="Center"
         Padding="20 5"
         CornerRadius="5"
         Margin="389,0,0,0">
-                    <Button Click="OpenCriticalWindow_Click"
+					<Button Click="OpenCriticalWindow_Click"
             Style="{StaticResource CriticalButtonStyle}">
-                        <!-- Sử dụng style đã định nghĩa -->
-                        Critical
-                    </Button>
-                </Border>
+						<!-- Sử dụng style đã định nghĩa -->
+						Critical
+					</Button>
+				</Border>
 
 
-                <!--Description Scroll Viewer-->
-                <ScrollViewer Grid.Row="1"
+				<!--Description Scroll Viewer-->
+				<ScrollViewer Grid.Row="1"
               VerticalScrollBarVisibility="Auto"
               HorizontalScrollBarVisibility="Disabled">
-                    <!--Description-->
-                    <TextBlock Text="Demo Task Description"
+					<!--Description-->
+					<TextBlock Text="Demo Task Description"
            FontSize="16"
            Foreground="{StaticResource PlaceholderText}"
            Margin="0 20"/>
-                </ScrollViewer>
+				</ScrollViewer>
 
-                <!--Due Date-->
-                <TextBlock Text="Due Date: 05/11/2024"
+				<!--Due Date-->
+				<TextBlock Text="Due Date: 05/11/2024"
            Background="{StaticResource AccentDark}"
            Margin="20 3"
            VerticalAlignment="Center"
            HorizontalAlignment="Left"
            Grid.Row="2"
            Foreground="White"/>
-            </Grid>
+			</Grid>
 
-            <Grid Grid.Row="1"
+			<Grid Grid.Row="1"
                   Margin="0 20 0 0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
-                <!--List Title-->
-                <TextBlock Style="{StaticResource Title}"
+				<Grid.RowDefinitions>
+					<RowDefinition Height="50" />
+					<RowDefinition Height="1*"/>
+				</Grid.RowDefinitions>
+				<!--List Title-->
+				<TextBlock Style="{StaticResource Title}"
                            Text="Task Check Lists"
                            VerticalAlignment="Center"
                            Margin="20 0 0 0"/>
-                <!--Check Lists-->
-                <ListView Grid.Row="1"
+				<!--Check Lists-->
+				<ListView Grid.Row="1"
                       Background="Transparent"
                       BorderThickness="0">
 
-                </ListView>
-            </Grid>
-            <!--Task View Buttons-->
-            <Grid Grid.Row="2">
-                <Button Style="{StaticResource TaskViewDeleteButton}"
+				</ListView>
+			</Grid>
+			<!--Task View Buttons-->
+			<Grid Grid.Row="2">
+				<Button Style="{StaticResource TaskViewDeleteButton}"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Content="Delete"
                         Margin="20 0 0 0"
                         Command="{Binding IOpenDeleteWindowCommand}"/>
-                <Button Style="{StaticResource TaskViewEditButton}"
+				<Button Style="{StaticResource TaskViewEditButton}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="Edit"
                         Command="{Binding IOpenEditTaskWindowCommand}"/>
-                <Button Style="{StaticResource TaskViewCompleteButton}"
+				<Button Style="{StaticResource TaskViewCompleteButton}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Content="Complete"
                         Margin="0 0 20 0"/>
-            </Grid>
-        </Grid>
+			</Grid>
+		</Grid>
 
-        <!--Task Status Bar-->
-        <Rectangle Fill="{StaticResource TaskStatusBackground}" 
+		<!--Task Status Bar-->
+		<Rectangle Fill="{StaticResource TaskStatusBackground}" 
                    Grid.Column="4"/>
-        <!--Sort Task Buttons-->
+		<!--Sort Task Buttons-->
 
-        <Button Content="Sort Task" Width="78" Height="27" 
+		<Button Content="Sort Task" Width="78" Height="28" 
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Margin="291,10,0,0" Click="OpenSortTask_Click" Grid.Column="1"/>
+                Margin="35,54,0,0" Click="OpenSortTask_Click" Grid.Column="1"/>
 
-        <!--Task Status-->
-        <Grid Grid.Column="4">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="230" />
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="140" />
-            </Grid.RowDefinitions>
-        </Grid>
-    </Grid>
+		<!--Task Status-->
+		<Grid Grid.Column="4">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="230" />
+				<RowDefinition Height="1*" />
+				<RowDefinition Height="140" />
+			</Grid.RowDefinitions>
+		</Grid>
+	</Grid>
 </Window>
