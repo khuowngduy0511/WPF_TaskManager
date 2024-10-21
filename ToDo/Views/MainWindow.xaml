@@ -23,7 +23,7 @@
         <!--Nav pane-->
         <Rectangle Fill="{StaticResource AccentDark}" />
         <StackPanel Margin="10,15,10,10">
-            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47" Command="{Binding LoadTasksCommand}">
                 <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
                     <Path Data="{StaticResource ListIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
                 </Viewbox>
@@ -97,9 +97,19 @@
 
             <!--List View For Task Item-->
             <ListView Grid.Row="2"
-                      Background="Transparent"
-                      Margin="0,20,0,20"
-                      BorderBrush="Transparent" Grid.RowSpan="2">
+          Background="Transparent"
+          Margin="0,20,0,20"
+          BorderBrush="Transparent"
+          ItemsSource="{Binding Tasks}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16"/>
+                            <TextBlock Text="{Binding DueDate, StringFormat=Due: {0:MM/dd/yyyy}}" FontSize="12" Foreground="Gray"/>
+                            <TextBlock Text="{Binding Description}" FontSize="14" Foreground="DarkGray"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
             </ListView>
 
         </Grid>
