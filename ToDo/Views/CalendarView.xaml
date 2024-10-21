@@ -4,8 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        MinWidth="1150" MinHeight="450"
-        Title="CalendarView" Height="832" Width="1200"
+        Title="CalendarView" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
 
     <Grid>

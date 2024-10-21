@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ToDo.Views"
         mc:Ignorable="d"
-        MinWidth="1150" MinHeight="450"
-        Title="TaskCompletedView" Height="832" Width="1200"
+        Title="TaskCompletedView" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
 
     <Grid>
