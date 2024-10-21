@@ -24,5 +24,21 @@ namespace ToDo.Views
             InitializeComponent();
         }
 
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Logic to add the task goes here
+            string taskTitle = TaskTitleTextBox.Text;
+            DateTime? dueDate = DueDatePicker.SelectedDate;
+            string description = DescriptionTextBox.Text;
+
+            // Implement your logic for adding the task
+            MessageBox.Show($"Task Added: {taskTitle}\nDue Date: {dueDate}\nDescription: {description}");
+        }
+
     }
 }

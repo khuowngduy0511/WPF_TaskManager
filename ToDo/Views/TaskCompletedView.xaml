@@ -1,0 +1,111 @@
+﻿<Window x:Class="ToDo.Views.TaskCompletedView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ToDo.Views"
+        mc:Ignorable="d"
+        Title="TaskCompletedView" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Rectangle Fill="{StaticResource AccentDark}" />
+
+        <StackPanel Margin="10,15,10,10">
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
+                <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
+                    <Path Data="{StaticResource ListIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
+                </Viewbox>
+            </Button>
+
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47" Command="{Binding iOpenTaskCompletedViewCommand}">
+                <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
+                    <Path Data="{StaticResource TickIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
+                </Viewbox>
+            </Button>
+
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47" Command="{Binding iOpenCalendarCommand}">
+                <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
+                    <Path Data="{StaticResource TimeIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
+                </Viewbox>
+            </Button>
+        </StackPanel>
+
+        <!-- Completed Tasks Label -->
+        <Label Content="Completed Tasks"
+               Style="{StaticResource Heading1}" 
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               Margin="10,10,0,0"
+               Grid.Column="1"
+               IsHitTestVisible="False"/>
+
+        <!-- DataGrid for displaying completed tasks -->
+        <DataGrid Grid.Column="1" 
+                  ItemsSource="{Binding CompletedTasks}" 
+                  AutoGenerateColumns="False" 
+                  Margin="10,50,10,10" 
+                  CanUserAddRows="False">
+            <DataGrid.Columns>
+
+                <!-- Task Title Column -->
+                <DataGridTextColumn Binding="{Binding Title}" Header="Task Title" Width="*" >
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+
+                <!-- Due Date Column -->
+                <DataGridTextColumn Binding="{Binding DueDate}" Header="Due Date" Width="*" >
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+
+                <!-- Completed Date Column -->
+                <DataGridTextColumn Binding="{Binding CompletedDate}" Header="Completed Date" Width="*" >
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+
+                <!-- Actions Column -->
+                <DataGridTemplateColumn Header="Actions" Width="120">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTemplateColumn.HeaderStyle>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Restore" 
+                                    Command="{Binding DataContext.RestoreTaskCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                    CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Window>
