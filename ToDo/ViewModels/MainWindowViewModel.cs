@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.ObjectModel; 
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 using ToDo.Views;
-
+using ToDo.Models;
+using System;
 namespace ToDo.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
@@ -21,6 +21,26 @@ namespace ToDo.ViewModels
 
 
         public event PropertyChangedEventHandler PropertyChanged;
+        private ObservableCollection<Task> _tasks;
+        public ObservableCollection<Task> Tasks
+        {
+            get { return _tasks; }
+            set
+            {
+                _tasks = value;
+                OnPropertyChanged(nameof(Tasks));
+            }
+        }
+        private Task selectedTask;
+        public Task SelectedTask
+        {
+            get { return selectedTask; }
+            set { selectedTask = value; OnPropertyChanged(nameof(SelectedTask)); }
+        }
+        public ICommand iOpenNewWindowCommand => new RelayCommand(OpenNewWindow);
+
+        public ICommand OpenEditTaskWindowCommand => new RelayCommand(OpenEditTaskWindow);
+
 
         // Commands for opening different windows
         public ICommand IOpenNewWindowCommand => new RelayCommand(OpenNewWindow);
@@ -59,7 +79,7 @@ namespace ToDo.ViewModels
         // Methods for opening different windows
         private void OpenNewWindow()
         {
-            NewTaskWindow newTaskWindow = new NewTaskWindow();
+            NewTaskWindow  newTaskWindow= new NewTaskWindow();
             newTaskWindow.Show();
         }
 

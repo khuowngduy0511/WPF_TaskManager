@@ -6,19 +6,21 @@
         xmlns:vm="clr-namespace:ToDo.ViewModels"
         xmlns:local="clr-namespace:ToDo"
         mc:Ignorable="d"
+        WindowState="Maximized"
+        Top="0" Left="0"
         MinWidth="1150" MinHeight="450"
         Title="MainWindow" Height="832" Width="1200">
-    <Window.DataContext>
-        <vm:MainWindowViewModel/>
-    </Window.DataContext>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80" />
-            <ColumnDefinition Width="410.667" />
-            <ColumnDefinition Width="24.333"/>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="140" />
-        </Grid.ColumnDefinitions>
+	<Window.DataContext>
+		<vm:MainWindowViewModel/>
+	</Window.DataContext>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="80" />
+			<ColumnDefinition Width="410.667" />
+			<ColumnDefinition Width="24.333"/>
+			<ColumnDefinition Width="1*" />
+			<ColumnDefinition Width="140" />
+		</Grid.ColumnDefinitions>
 
         <!--Nav pane-->
         <Rectangle Fill="{StaticResource AccentDark}" />
@@ -191,7 +193,7 @@
                         Content="Delete"
                         Margin="20 0 0 0"
                         Command="{Binding IOpenDeleteWindowCommand}"/>
-                <Button Style="{StaticResource TaskViewEditButton}"
+				<Button Style="{StaticResource TaskViewEditButton}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="Edit"
@@ -207,6 +209,11 @@
         <!--Task Status Bar-->
         <Rectangle Fill="{StaticResource TaskStatusBackground}" 
                    Grid.Column="4"/>
+		<!--Sort Task Buttons-->
+
+		<Button Content="Sort Task" Width="78" Height="28" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Margin="35,54,0,0" Click="OpenSortTask_Click" Grid.Column="1"/>
 
         <!--Task Status-->
         <Grid Grid.Column="4">

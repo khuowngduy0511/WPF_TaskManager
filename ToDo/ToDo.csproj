@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Views\CriticalWindow.xaml.cs">
+      <DependentUpon>CriticalWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DeleteTaskWindow.xaml.cs">
       <DependentUpon>DeleteTaskWindow.xaml</DependentUpon>
     </Compile>
@@ -66,6 +69,9 @@
     </Compile>
     <Compile Include="Views\NewTaskWindow.xaml.cs">
       <DependentUpon>NewTaskWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SortTask.xaml.cs">
+      <DependentUpon>SortTask.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
@@ -100,6 +106,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CriticalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -125,6 +135,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TaskCompletedView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SortTask.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

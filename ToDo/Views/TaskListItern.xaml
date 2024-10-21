@@ -12,42 +12,36 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <!--Title-->
-        <TextBlock Text="Title"
-                   Style="{StaticResource Title}"
-                   Margin="20 0"
-                   VerticalAlignment="Center"
-                   Foreground="{StaticResource TaskListTitleText}"/>
 
-        <!--Importance Badge-->
+        <!-- Title -->
+        <TextBlock Text="{Binding Title}" 
+                   Style="{StaticResource Title}" 
+                   Margin="20 0" 
+                   VerticalAlignment="Center" 
+                   Foreground="{StaticResource TaskListTitleText}" />
+
+        <!-- Importance Badge -->
         <Border CornerRadius="3" Background="{StaticResource PlaceholderBorder}"
                 Height="23"
                 HorizontalAlignment="Right"
                 Margin="0 0 20 0">
-            <TextBlock Text="Importance" Foreground="{StaticResource PlaceholderBorderText}"
+            <TextBlock Text="{Binding Importance}" Foreground="{StaticResource PlaceholderBorderText}"
                        VerticalAlignment="Center"
-                       HorizontalAlignment="Center">
-                
-            </TextBlock>
-            
+                       HorizontalAlignment="Center" />
         </Border>
-        
-        <!--Des-->
-        <TextBlock Text="Task Description is a detailed statement of work that is usually incorporated into a contract as an attachment."
-                    TextWrapping="Wrap"
+
+        <!-- Description -->
+        <TextBlock Text="{Binding Description}" 
+                   TextWrapping="Wrap"
                    Grid.Row="1"
-                   Margin="20 5 0 0"
-                   Foreground="{StaticResource TaskListDesText}">
-        </TextBlock>
-        
-        <!--Due Date-->
-        <TextBlock Text="Due: 05/11/2024"
+                   Margin="20 5 0 0" 
+                   Foreground="{StaticResource TaskListDesText}" />
+
+        <!-- Due Date -->
+        <TextBlock Text="{Binding DueDate, StringFormat='Due: {0:MM/dd/yyyy}'}"
                    Grid.Row="2"
                    VerticalAlignment="Center"
-                   Margin="20 0"
-                   Foreground="{StaticResource TaskListDesText}"/>
-
-
-
+                   Margin="20 0" 
+                   Foreground="{StaticResource TaskListDesText}" />
     </Grid>
 </UserControl>
