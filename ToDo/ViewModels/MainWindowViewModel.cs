@@ -17,6 +17,9 @@ namespace ToDo.ViewModels
         public ICommand IOpenSearchWindowCommand => new RelayCommand(OpenSearchWindow);
         public ICommand IOpenDeleteWindowCommand => new RelayCommand(OpenDeleteTaskWindow);
         public ICommand IOpenEditTaskWindowCommand => new RelayCommand(OpenEditTaskWindow);
+        public ICommand iOpenCalendarCommand => new RelayCommand(OpenCalendarView);
+        public ICommand iOpenTaskCompletedViewCommand => new RelayCommand(OpenTaskCompletedView);
+
         private void OpenNewWindow()
         {
             NewTaskWindow  newTaskWindow= new NewTaskWindow();
@@ -38,6 +41,20 @@ namespace ToDo.ViewModels
             EditTaskWindow editTaskWindow = new EditTaskWindow();
             editTaskWindow.ShowDialog(); 
         }
+        private void OpenCalendarView()
+        {
+            // Create an instance of CalendarView and show it
+            CalendarView calendarView = new CalendarView();
+            calendarView.Show();
+        }
+
+        private void OpenTaskCompletedView()
+        {
+            // Create an instance of TaskCompletedView and show it
+            TaskCompletedView taskCompletedView = new TaskCompletedView();
+            taskCompletedView.Show();
+        }
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

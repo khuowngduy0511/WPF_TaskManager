@@ -29,13 +29,13 @@
                 </Viewbox>
             </Button>
 
-            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47" Command="{Binding iOpenTaskCompletedViewCommand}">
                 <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
                     <Path Data="{StaticResource TickIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
                 </Viewbox>
             </Button>
 
-            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47" Command="{Binding iOpenCalendarCommand}">
                 <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
                     <Path Data="{StaticResource TimeIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
                 </Viewbox>
