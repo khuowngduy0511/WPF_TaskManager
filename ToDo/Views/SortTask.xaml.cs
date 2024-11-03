@@ -23,5 +23,20 @@ namespace ToDo.Views
         {
             InitializeComponent();
         }
+
+        // Close button click event
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        // Sort button click event
+        private void SortButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        // Assuming Tasks is a property in the DataContext or ViewModel containing the task list
+        public List<Task> Tasks { get; set; }
     }
 }

@@ -24,7 +24,7 @@
     <SolidColorBrush x:Key="PlaceholderBorderText" Color="#FF373737" />
 
     <!--Button Color-->
-    <SolidColorBrush x:Key="Button.Complete" Color="#FF57B1B6" />
+    <SolidColorBrush x:Key="Button.Complete" Color="#FF76AC73" />
     <SolidColorBrush x:Key="Button.Complete.Over" Color="#FF4B886B" />
     <SolidColorBrush x:Key="Button.Complete.Click" Color="#FF9FD4BB" />
     <SolidColorBrush x:Key="Button.Edit" Color="#FF848484" />
@@ -33,6 +33,13 @@
     <SolidColorBrush x:Key="Button.Delete" Color="#FFA94949" />
     <SolidColorBrush x:Key="Button.Delete.Over" Color="#FF863636" />
     <SolidColorBrush x:Key="Button.Delete.Click" Color="#FFC18888" />
+    <SolidColorBrush x:Key="Button.Sort" Color="#FF57B1B6" />
+    <SolidColorBrush x:Key="Button.Sort.Over" Color="#FF196EB8" />
+    <SolidColorBrush x:Key="Button.Sort.Click" Color="#FF28DAD4" />
+
+    <SolidColorBrush x:Key="Button.Critical" Color="#FFBEAC35" />
+    <SolidColorBrush x:Key="Button.Critical.Over" Color="#FFB18E23" />
+    <SolidColorBrush x:Key="Button.Critical.Click" Color="#FFC2BC66" />
 
     <SolidColorBrush x:Key="Nav.Default" Color="Transparent" />
     <SolidColorBrush x:Key="Nav.Over" Color="#FF396A84" />

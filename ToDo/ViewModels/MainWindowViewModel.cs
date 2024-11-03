@@ -32,6 +32,8 @@ namespace ToDo.ViewModels
         public ICommand iOpenCalendarCommand => new RelayCommand(OpenCalendarView);
         public ICommand iOpenTaskCompletedViewCommand => new RelayCommand(OpenTaskCompletedView);
         public ICommand IOpenCriticalWindowCommand => new RelayCommand(OpenCriticalWindow);
+        public ICommand IOpenSortlWindowCommand => new RelayCommand(OpenSortWindow);
+
         public ICommand FilterHighPriorityCommand { get; set; }
 
         // Command to load tasks when the List Icon is clicked
@@ -101,6 +103,12 @@ namespace ToDo.ViewModels
         {
             CriticalWindow criticalWindow = new CriticalWindow();
             criticalWindow.Show();
+        }
+
+        private void OpenSortWindow()
+        {
+            SortTask sortWindow = new SortTask();
+            sortWindow.Show();
         }
 
         // Helper method to notify when properties change (for data binding)

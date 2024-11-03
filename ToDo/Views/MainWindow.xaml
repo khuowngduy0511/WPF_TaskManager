@@ -10,36 +10,50 @@
         Top="0" Left="0"
         MinWidth="1150" MinHeight="450"
         Title="MainWindow" Height="832" Width="1200">
-	<Window.DataContext>
-		<vm:MainWindowViewModel/>
-	</Window.DataContext>
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="80" />
-			<ColumnDefinition Width="410.667" />
-			<ColumnDefinition Width="24.333"/>
-			<ColumnDefinition Width="1*" />
-			<ColumnDefinition Width="140" />
-		</Grid.ColumnDefinitions>
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="410.667" />
+            <ColumnDefinition Width="24.333"/>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="140" />
+        </Grid.ColumnDefinitions>
 
         <!--Nav pane-->
         <Rectangle Fill="{StaticResource AccentDark}" />
         <StackPanel Margin="10,15,10,10">
             <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47" Command="{Binding LoadTasksCommand}">
-                <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
+                <Viewbox Width="33" Height="25" RenderTransformOrigin="0.5,0.5">
                     <Path Data="{StaticResource ListIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
                 </Viewbox>
             </Button>
 
             <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47" Command="{Binding iOpenTaskCompletedViewCommand}">
-                <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
+                <Viewbox Width="33" Height="25" RenderTransformOrigin="0.5,0.5">
                     <Path Data="{StaticResource TickIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
                 </Viewbox>
             </Button>
 
             <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47" Command="{Binding iOpenCalendarCommand}">
-                <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
+                <Viewbox Width="33" Height="25" RenderTransformOrigin="0.5,0.5">
                     <Path Data="{StaticResource TimeIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
+                </Viewbox>
+            </Button>
+
+            <Button Style="{StaticResource SearchButton}" Height="49" Width="47" Command="{Binding IOpenSearchWindowCommand}">
+                <Viewbox Width="33" Height="25" RenderTransformOrigin="0.5,0.5">
+                    <Viewbox.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="-1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Viewbox.RenderTransform>
+                    <Path Data="{StaticResource SearchICon}" Fill="White" Height="31" Stretch="Fill" Width="49"/>
                 </Viewbox>
             </Button>
         </StackPanel>
@@ -74,28 +88,7 @@
                 </Viewbox>
             </Button>
 
-            <!--Search Button-->
-            <Border
-                Margin="319,10,65,10"
-                CornerRadius="20">
-                <Grid>
-                      
-                    <Button Style="{StaticResource SearchButton}"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Width="40"
-                Height="40"
-                Margin="0,0,5,0"
-                Background="Transparent"
-                BorderBrush="Transparent"
-                Command="{Binding IOpenSearchWindowCommand}">
 
-                        <Viewbox Width="30" Height="30">
-                            <Path Data="{StaticResource SearchICon}" Fill="{StaticResource Borders}"/>
-                        </Viewbox>
-                    </Button>
-                </Grid>
-            </Border>
 
             <!--List View For Task Item-->
             <ListView Grid.Row="2"
@@ -135,16 +128,6 @@
                 <TextBlock Text="Task Title" 
            Style="{StaticResource Title}"
            VerticalAlignment="Center"/>
-                <!--Importance Badge-->
-				<Button Content="Critical"
-						HorizontalAlignment="Right"
-						VerticalAlignment="Center"
-						Padding="20 5"
-						FontWeight="Bold"
-						Foreground="{StaticResource OnAccent}"
-						Background="{StaticResource Importance-Critical}"
-						Command="{Binding IOpenCriticalWindowCommand}">
-				</Button>
                 <!--Description Scroll Viewer-->
                 <ScrollViewer Grid.Row="1"
               VerticalScrollBarVisibility="Auto"
@@ -186,19 +169,8 @@
             </Grid>
             <!--Task View Buttons-->
             <Grid Grid.Row="2">
-                <Button Style="{StaticResource TaskViewDeleteButton}"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Content="Delete"
-                        Margin="20 0 0 0"
-                        Command="{Binding IOpenDeleteWindowCommand}"/>
-				<Button Style="{StaticResource TaskViewEditButton}"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="Edit"
-                        Command="{Binding IOpenEditTaskWindowCommand}"/>
                 <Button Style="{StaticResource TaskViewCompleteButton}"
-                        HorizontalAlignment="Right"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="Complete"
                         Margin="0 0 20 0"/>
@@ -207,12 +179,37 @@
 
         <!--Task Status Bar-->
         <Rectangle Fill="{StaticResource TaskStatusBackground}" 
-                   Grid.Column="4"/>
-		<!--Sort Task Buttons-->
+                   Grid.Column="4" Margin="0,-10,0,10"/>
 
-		<Button Content="Sort Task" Width="78" Height="28" 
-                HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Margin="35,54,0,0" Click="OpenSortTask_Click" Grid.Column="1"/>
+
+
+        <!-- Task View Buttons: Delete, Edit, Critical and Sort-->
+        <StackPanel Grid.Column="4" VerticalAlignment="Top" Margin="0,30,0,0">
+
+            <Button Style="{StaticResource TaskViewCriticalButton}"
+            HorizontalAlignment="Center"
+            Content="Critical"
+            Margin="0,10,0,0"
+            Command="{Binding IOpenCriticalWindowCommand}" Width="78"/>
+            <Button Style="{StaticResource TaskViewSortButton}"
+            HorizontalAlignment="Center"
+            Content="Sort"
+            Margin="0,10,0,0"
+            Command="{Binding IOpenSortlWindowCommand}" Width="78"/>
+            <Button Style="{StaticResource TaskViewDeleteButton}"
+            HorizontalAlignment="Center"
+            Content="Delete"
+            Margin="0,10,0,0"
+            Command="{Binding IOpenDeleteWindowCommand}"/>
+            <Button Style="{StaticResource TaskViewEditButton}"
+            HorizontalAlignment="Center"
+            Content="Edit"
+            Margin="0,10,0,0"
+            Command="{Binding IOpenEditTaskWindowCommand}" Width="78"/>
+
+        </StackPanel>
+
+
 
         <!--Task Status-->
         <Grid Grid.Column="4">
