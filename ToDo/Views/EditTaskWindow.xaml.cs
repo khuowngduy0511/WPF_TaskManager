@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TaskEntity = ToDo.Models.Task;
 
 namespace ToDo.Views
 {
@@ -19,63 +20,54 @@ namespace ToDo.Views
     /// </summary>
     public partial class EditTaskWindow : Window
     {
+        private TaskEntity _task;
+        private Task selectedTask;
+
         public EditTaskWindow()
         {
             InitializeComponent();
         }
-        private List<Task> tasks; // Assuming you have a Task class defined
-        private Task selectedTask;
 
-        public EditTaskWindow(List<Task> tasks)
+        public EditTaskWindow(TaskEntity task)
         {
-            this.tasks = tasks;
-            LoadTasks();
+            InitializeComponent();
+            _task = task;
+            LoadTaskData();
         }
-        public class Task
-        {
-            public string Title { get; set; }
-            public DateTime? DueDate { get; set; } // Nullable DateTime
-            public string Description { get; set; }
 
-            public override string ToString()
+        public Task Task { get; private set; }
+
+        private void LoadTaskData()
+        {
+            if (_task != null)
             {
-                return Title; // Return the Title for ComboBox display
+                TaskTitleTextBox.Text = _task.Title;
+                DescriptionTextBox.Text = _task.Description;
+                DueDatePicker.SelectedDate = _task.DueDate;
+                // Cập nhật các thêm control khác
             }
-        }
-        private void LoadTasks()
-        {
-            TaskComboBox.ItemsSource = tasks; // Assuming Task has a meaningful ToString() method
-        }
 
-        private void TaskComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (TaskComboBox.SelectedItem is Task task)
-            {
-                selectedTask = task;
-                TaskTitleTextBox.Text = selectedTask.Title;
-                DueDatePicker.SelectedDate = selectedTask.DueDate;
-                DescriptionTextBox.Text = selectedTask.Description;
-            }
-        }
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Save changes to the selected task
-            if (selectedTask != null)
+            if (_task != null)
             {
-                selectedTask.Title = TaskTitleTextBox.Text;
-                selectedTask.DueDate = DueDatePicker.SelectedDate;
-                selectedTask.Description = DescriptionTextBox.Text;
+                _task.Title = TaskTitleTextBox.Text;
+                _task.Description = DescriptionTextBox.Text;
+                _task.DueDate = DueDatePicker.SelectedDate ?? DateTime.Now;
+                // Cập nhật các thuộc tính khác
 
-                // Add logic to save updated task to your data store
+                DialogResult = true;
             }
-
-            this.Close();
+            Close();
         }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
+        }
+
     }
 }

@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ToDo.Models;
+using Task = ToDo.Models.Task;
 
 namespace ToDo.Views
 {
@@ -19,10 +21,13 @@ namespace ToDo.Views
     /// </summary>
     public partial class NewTaskWindow : Window
     {
+
         public NewTaskWindow()
         {
             InitializeComponent();
         }
+
+        public Task Task { get; private set; }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
@@ -31,13 +36,17 @@ namespace ToDo.Views
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            // Logic to add the task goes here
-            string taskTitle = TaskTitleTextBox.Text;
-            DateTime? dueDate = DueDatePicker.SelectedDate;
-            string description = DescriptionTextBox.Text;
+            Task = new Task
+            {
+                Title = TaskTitleTextBox.Text,
+                Description = DescriptionTextBox.Text,
+                DueDate = DueDatePicker.SelectedDate ?? DateTime.Now,
+                StartDate = DateTime.Now,
+                TaskState = TaskState.NotStarted
+            };
 
-            // Implement your logic for adding the task
-            MessageBox.Show($"Task Added: {taskTitle}\nDue Date: {dueDate}\nDescription: {description}");
+            DialogResult = true;
+            Close();
         }
 
     }
