@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +9,12 @@ namespace ToDo.Models
 {
     public class Task
     {
+        [Key]
         public int id { get; set; }
+        [Required]
+        [StringLength(200)]
         public string Title { get; set; }
+        [StringLength(1000)]
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
         public DateTime StartDate { get; set; }

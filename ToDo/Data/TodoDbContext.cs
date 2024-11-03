@@ -6,28 +6,25 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskEntity = ToDo.Models.Task;
 
 namespace ToDo.Data
 {
     public class TodoDbContext : DbContext
     {
-        public DbSet<Task> Tasks { get; set; }
+        public DbSet<TaskEntity> Tasks { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public TodoDbContext(DbContextOptions<TodoDbContext> options)
+    : base(options)
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-            var connectionString = config.GetConnectionString("DefaultConnection");
-            optionsBuilder.UseSqlServer(connectionString);
         }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Task>(entity =>
+            modelBuilder.Entity<TaskEntity>(entity =>
             {
-                entity.HasKey(e => e.Id);
+                entity.HasKey(e => e.id);
             });
         }
 
