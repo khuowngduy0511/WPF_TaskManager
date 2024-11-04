@@ -129,7 +129,7 @@
           Background="Transparent"
           Margin="0,20,0,64"
           BorderBrush="Transparent"
-                      ItemsSource="{Binding TasksView}" SelectedItem="{Binding SelectedTask, Mode=TwoWay}" Grid.RowSpan="2"  FontWeight="Light" FontSize="14"
+                      ItemsSource="{Binding TasksView}" SelectedItem="{Binding SelectedTask, Mode=TwoWay}" Grid.RowSpan="2"  FontWeight="ExtraLight" FontSize="14"
                       >
 
                 <ListView.ItemTemplate>

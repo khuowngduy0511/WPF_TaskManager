@@ -45,17 +45,32 @@ namespace ToDo
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")),
                 ServiceLifetime.Scoped);
 
+            services.AddTransient<SortTaskViewModel>();
+            services.AddTransient<SortTask>();
+
+
+            services.AddTransient<CriticalTaskViewModel>();
+
+
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<MainWindowViewModel>();
-            services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<MainWindowViewModel>(sp =>
+            {
+                var taskService = sp.GetRequiredService<ITaskService>();
+                var sortTaskViewModelFactory = new Func<SortTaskViewModel>(() => sp.GetRequiredService<SortTaskViewModel>());
+                var criticalWindowFactory = new Func<CriticalWindow>(() => sp.GetRequiredService<CriticalWindow>());
+                return new MainWindowViewModel(taskService, sortTaskViewModelFactory, criticalWindowFactory);
+            });
             services.AddSingleton<MainWindow>();
             services.AddTransient<NewTaskWindow>(provider =>
     new NewTaskWindow(
         provider.GetRequiredService<ITaskService>(),
         provider.GetRequiredService<MainWindowViewModel>()
-    )
-);
+                )
+            );
+            services.AddTransient<CriticalWindow>();
+
         }
 
         protected override void OnStartup(StartupEventArgs e)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Sort Task" Height="450" Width="800"
-        Background="#f8f9fa" WindowStartupLocation="CenterScreen">
+        Background="#f8f9fa" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
 
 
     <Grid>
@@ -23,16 +23,16 @@
 
                 <!-- DataGrid for Tasks -->
                 <DataGrid x:Name="TaskDataGrid" AutoGenerateColumns="False" Margin="0,20,0,20"
-                          ItemsSource="{Binding Tasks}">
+          ItemsSource="{Binding Tasks}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Task Title" Binding="{Binding TaskTitle}" Width="*" />
-                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
-                        <DataGridTextColumn Header="Due Day" Binding="{Binding DueDay}" Width="*" />
+                        <DataGridTextColumn Header="Task Title" Binding="{Binding Title}" Width="*" />
+                        <DataGridTextColumn Header="Status" Binding="{Binding TaskState}" Width="*" />
+                        <DataGridTextColumn Header="Due Day" Binding="{Binding DueDate, StringFormat={}{0:MM/dd/yyyy}}" Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
 
                 <!-- Button Section -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,220,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,40,0,0">
                     <Button Content="Close" Background="#6c757d" Foreground="White" 
                             Margin="0,0,10,0" Click="CloseButton_Click"/>
                     <Button Content="Sort" Background="#007bff" Foreground="White" 

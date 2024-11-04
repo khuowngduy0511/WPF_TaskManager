@@ -10,6 +10,7 @@ using ToDo.Views;
 using System.Windows;
 using ToDo.Models;
 using Task = System.Threading.Tasks.Task;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ToDo.ViewModels
 {
@@ -17,6 +18,8 @@ namespace ToDo.ViewModels
     {
         private readonly ITaskService _taskService;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+        private readonly Func<SortTaskViewModel> _sortTaskViewModelFactory;
+        private readonly Func<CriticalWindow> _criticalWindowFactory;   
         private ObservableCollection<TaskEntity> _tasks;
         private TaskEntity _selectedTask;
         private string _searchText;
@@ -33,7 +36,7 @@ namespace ToDo.ViewModels
         public ICommand LoadTasksCommand { get; }
         public ICommand SearchCommand { get; }
         public ICommand CompleteTaskCommand { get; private set; }
-
+        public ICommand OpenSortWindowCommand { get; }
 
 
 
@@ -88,10 +91,12 @@ namespace ToDo.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         // Constructor
-        public MainWindowViewModel(ITaskService taskService)
+        public MainWindowViewModel(ITaskService taskService, Func<SortTaskViewModel> sortTaskViewModelFactory, Func<CriticalWindow> criticalWindowFactory)
         {
             _taskService = taskService;
             _tasks = new ObservableCollection<TaskEntity>();
+            _sortTaskViewModelFactory = sortTaskViewModelFactory;
+            _criticalWindowFactory = criticalWindowFactory;
             TasksView = CollectionViewSource.GetDefaultView(_tasks);
             if (TasksView != null)
             {
@@ -101,6 +106,7 @@ namespace ToDo.ViewModels
             LoadTasksCommand = new RelayCommand(async () => await LoadTasksAsync());
             SearchCommand = new RelayCommand(ExecuteSearch);
             CompleteTaskCommand = new RelayCommand(ExecuteCompleteTask, CanExecuteCompleteTask);
+
 
 
             // Initial load of tasks
@@ -253,13 +259,14 @@ namespace ToDo.ViewModels
 
         private void OpenCriticalWindow()
         {
-            CriticalWindow criticalWindow = new CriticalWindow();
+            var criticalWindow = _criticalWindowFactory();
             criticalWindow.Show();
         }
 
         private void OpenSortWindow()
         {
-            SortTask sortWindow = new SortTask();
+            var sortTaskViewModel = _sortTaskViewModelFactory();
+            var sortWindow = new SortTask(sortTaskViewModel);
             sortWindow.Show();
         }
     }

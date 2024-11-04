@@ -19,11 +19,11 @@
 
                 <!-- DataGrid for Critical Tasks -->
                 <DataGrid x:Name="taskDataGrid" AutoGenerateColumns="False" Margin="0,20,0,20"
-                          ItemsSource="{Binding Tasks}">
+          ItemsSource="{Binding Tasks}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Task Title" Binding="{Binding TaskTitle}" Width="*" />
-                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
-                        <DataGridTextColumn Header="Due Day" Binding="{Binding DueDay}" Width="*" />
+                        <DataGridTextColumn Header="Task Title" Binding="{Binding Title}" Width="*" />
+                        <DataGridTextColumn Header="Status" Binding="{Binding TaskState}" Width="*" />
+                        <DataGridTextColumn Header="Due Day" Binding="{Binding DueDate, StringFormat={}{0:MM/dd/yyyy}}" Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
 
