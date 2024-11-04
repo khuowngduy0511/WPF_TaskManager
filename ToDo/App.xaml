@@ -12,6 +12,7 @@
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <local:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
+            <local:NullToBooleanConverter x:Key="NullToBooleanConverter"/>
         </ResourceDictionary>
         
     </Application.Resources>

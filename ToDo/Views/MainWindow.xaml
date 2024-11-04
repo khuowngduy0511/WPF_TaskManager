@@ -88,7 +88,7 @@
                    Content="Search Task..."
                    Grid.Row="1"
                    VerticalAlignment="Center"
-                   Margin="20,0,70,0"
+                   Margin="34,0,56,0"
                    Foreground="{StaticResource Borders}"
                    Visibility="{Binding Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=TaskSearchBox}"/>
 
@@ -199,7 +199,9 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Margin="0,20,0,0"
-                        Command="{Binding CompleteTaskCommand}"/>
+                Command="{Binding DataContext.CompleteTaskCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                 IsEnabled="{Binding DataContext.SelectedTask, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource NullToBooleanConverter}}"
+                ToolTip="Select a task to complete"/>
             </StackPanel>
         </Grid>
 

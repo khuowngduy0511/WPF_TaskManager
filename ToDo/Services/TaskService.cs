@@ -44,7 +44,18 @@ namespace ToDo.Services
 
         public async Task<TaskEntity> UpdateTaskAsync(TaskEntity task)
         {
-            return await _taskRepository.UpdateTaskAsync(task);
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"Updating task: {task.id}, IsComplete: {task.IsComplete}");
+                var result = await _taskRepository.UpdateTaskAsync(task);
+                System.Diagnostics.Debug.WriteLine($"Task updated successfully: {result.id}");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in TaskService.UpdateTaskAsync: {ex.Message}");
+                throw;
+            }
         }
 
 

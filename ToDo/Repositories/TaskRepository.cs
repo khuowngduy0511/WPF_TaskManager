@@ -18,9 +18,10 @@ namespace ToDo.Repositories
             _context = context;
         }
 
+
         public async Task<IEnumerable<TaskEntity>> GetAllTasksAsync()
         {
-            return await _context.Tasks.ToListAsync();
+            return await _context.Tasks.Where(t => !t.IsComplete).ToListAsync();
         }
 
         public async Task<TaskEntity> GetTaskByIdAsync(int id)
@@ -37,10 +38,19 @@ namespace ToDo.Repositories
 
         public async Task<TaskEntity> UpdateTaskAsync(TaskEntity task)
         {
-            _context.Entry(task).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return task;
-        }
+            try
+            {
+                _context.Entry(task).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return task;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in TaskRepository.UpdateTaskAsync: {ex.Message}");
+                throw;
+            }
+        }   
+
 
         public async System.Threading.Tasks.Task DeleteTaskAsync(int id)
         {

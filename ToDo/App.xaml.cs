@@ -29,7 +29,8 @@ namespace ToDo
             ServiceCollection services = new ServiceCollection();
             ConfigureServices(services);
             serviceProvider = services.BuildServiceProvider();
-            Resources.Add("BoolToYesNoConverter", new BoolToYesNoConverter());  
+            Resources.Add("BoolToYesNoConverter", new BoolToYesNoConverter());
+            Resources.Add("NullToBooleanConverter", new NullToBooleanConverter());
         }
 
         private void ConfigureServices(ServiceCollection services)
@@ -62,8 +63,10 @@ namespace ToDo
             base.OnStartup(e);
 
             var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
+            var viewModel = serviceProvider.GetRequiredService<MainWindowViewModel>();
+            System.Diagnostics.Debug.WriteLine($"MainWindow DataContext: {mainWindow.DataContext}");
+            System.Diagnostics.Debug.WriteLine($"ViewModel: {viewModel}");
             mainWindow.Show();
-
         }
     }
 }

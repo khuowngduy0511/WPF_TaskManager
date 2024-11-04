@@ -42,7 +42,7 @@ namespace ToDo.ViewModels
         public RelayCommand(Action<T> execute, Predicate<T> canExecute = null)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;   
+            _canExecute = canExecute;
         }
 
         public bool CanExecute(object parameter)
@@ -54,6 +54,7 @@ namespace ToDo.ViewModels
         {
             _execute((T)parameter);
         }
+
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }

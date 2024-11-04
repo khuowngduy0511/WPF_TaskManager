@@ -8,6 +8,8 @@ using TaskEntity = ToDo.Models.Task;
 using ToDo.Services;
 using ToDo.Views;
 using System.Windows;
+using ToDo.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace ToDo.ViewModels
 {
@@ -30,7 +32,10 @@ namespace ToDo.ViewModels
         public ICommand IOpenSortlWindowCommand => new RelayCommand(OpenSortWindow);
         public ICommand LoadTasksCommand { get; }
         public ICommand SearchCommand { get; }
-        public ICommand CompleteTaskCommand { get; }
+        public ICommand CompleteTaskCommand { get; private set; }
+
+
+
 
         // Properties
         public ObservableCollection<TaskEntity> Tasks
@@ -65,6 +70,7 @@ namespace ToDo.ViewModels
             {
                 _selectedTask = value;
                 OnPropertyChanged(nameof(SelectedTask));
+                CommandManager.InvalidateRequerySuggested();
             }
         }
 
@@ -96,33 +102,13 @@ namespace ToDo.ViewModels
             SearchCommand = new RelayCommand(ExecuteSearch);
             CompleteTaskCommand = new RelayCommand(ExecuteCompleteTask, CanExecuteCompleteTask);
 
+
             // Initial load of tasks
             _ = LoadTasksAsync();
         }
 
-        private bool CanExecuteCompleteTask()
-        {
-            return SelectedTask != null && !SelectedTask.IsComplete;
-        }
 
-        private async void ExecuteCompleteTask()
-        {
-            if (SelectedTask != null)
-            {
-                try
-                {
-                    SelectedTask.IsComplete = true;
-                    await _taskService.UpdateTaskAsync(SelectedTask);
-                    Tasks.Remove(SelectedTask);
-                    SelectedTask = null;
-                    OnPropertyChanged(nameof(SelectedTask));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error completing task: {ex.Message}");
-                }
-            }
-        }
+  
 
         public async Task RefreshTasksAsync()
         {
@@ -163,6 +149,58 @@ namespace ToDo.ViewModels
                 _semaphore.Release();
             }
         }
+
+        private bool CanExecuteCompleteTask()
+        {
+            return SelectedTask != null && !SelectedTask.IsComplete;
+        }
+
+        private async void ExecuteCompleteTask()
+        {
+            System.Diagnostics.Debug.WriteLine("ExecuteCompleteTask called");
+
+            try
+            {
+                if (SelectedTask == null)
+                {
+                    MessageBox.Show("No task selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                var result = MessageBox.Show(
+                    $"Are you sure you want to complete the task '{SelectedTask.Title}'?",
+                    "Confirm Complete",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question
+                );
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    SelectedTask.IsComplete = true;
+                    SelectedTask.TaskState = TaskState.Complete;
+
+                    await _taskService.UpdateTaskAsync(SelectedTask);
+
+                    // Remove from list and update UI
+                    Tasks.Remove(SelectedTask);
+                    MessageBox.Show("Task completed successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    // Clear selection
+                    SelectedTask = null;
+
+                    // Refresh the view
+                    OnPropertyChanged(nameof(Tasks));
+                    TasksView?.Refresh();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in ExecuteCompleteTask: {ex.Message}");
+                MessageBox.Show($"Error completing task: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
 
         public void AddNewTask(TaskEntity newTask)
         {
