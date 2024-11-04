@@ -56,7 +56,7 @@ namespace ToDo.Services
                 System.Diagnostics.Debug.WriteLine($"Error in TaskService.UpdateTaskAsync: {ex.Message}");
                 throw;
             }
-        }
+        }   
 
 
         public async Task<IEnumerable<TaskEntity>> GetCriticalTasksAsync()

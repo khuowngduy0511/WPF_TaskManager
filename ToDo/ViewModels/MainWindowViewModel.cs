@@ -234,8 +234,9 @@ namespace ToDo.ViewModels
 
         private void OpenEditTaskWindow()
         {
-            EditTaskWindow editTaskWindow = new EditTaskWindow();
-            editTaskWindow.ShowDialog();
+            var editTaskViewModel = new EditTaskViewModel(_taskService);
+            var editTaskWindow = new EditTaskWindow(editTaskViewModel);
+            editTaskWindow.Show();
         }
 
         private void OpenCalendarView()

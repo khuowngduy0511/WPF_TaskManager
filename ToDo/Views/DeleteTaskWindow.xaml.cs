@@ -5,10 +5,14 @@ namespace ToDo.Views
 {
     public partial class DeleteTaskWindow : Window
     {
+        private readonly DeleteTaskViewModel _viewModel;
+
         public DeleteTaskWindow(DeleteTaskViewModel viewModel)
         {
             InitializeComponent();
+            _viewModel = viewModel;
             DataContext = viewModel;
+            _viewModel.CloseAction = () => Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

@@ -12,6 +12,8 @@ namespace ToDo.ViewModels
         private readonly ITaskService _taskService;
         private ObservableCollection<TaskItemViewModel> _tasks;
 
+        public Action CloseAction { get; set; }
+
         public ObservableCollection<TaskItemViewModel> Tasks
         {
             get => _tasks;
@@ -24,6 +26,8 @@ namespace ToDo.ViewModels
 
         public ICommand DeleteCommand { get; }
         public ICommand CancelCommand { get; }
+
+
 
         public DeleteTaskViewModel(ITaskService taskService)
         {
@@ -60,7 +64,7 @@ namespace ToDo.ViewModels
 
         private void ExecuteCancel()
         {
-            // Implement close window logic
+            CloseAction?.Invoke(); 
         }
     }
 

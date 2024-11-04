@@ -1,11 +1,11 @@
-﻿<Window x:Class="ToDo.Views.EditTaskWindow"
+﻿<Window x:Class="ToDo.Views.EditTaskWindow" 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ToDo.Views"
         mc:Ignorable="d"
-        Title="EditTaskWindow" Height="550" Width="900" WindowStartupLocation="CenterScreen">
+        Title="EditTaskWindow" Height="800" Width="1000" WindowStartupLocation="CenterScreen">
     <Grid>
         <Border Background="White" CornerRadius="5" Margin="20" Padding="20">
             <Border.Effect>
@@ -16,39 +16,69 @@
                 <!-- Header with Title and Close Button -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                     <TextBlock Text="Edit Task" FontSize="18" FontWeight="Bold" Width="723"/>
-                    <Button Content="x" FontSize="20" Width="70" Height="30" 
-                            Background="Transparent" BorderBrush="Transparent"
-                            Click="CloseButton_Click"/>
                 </StackPanel>
 
                 <!-- Task Selection -->
                 <StackPanel Margin="0,20,0,0">
                     <TextBlock Text="Select Task" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="TaskComboBox" Margin="0,0,0,20"/>
+                    <ComboBox ItemsSource="{Binding Tasks}" 
+                              SelectedItem="{Binding SelectedTask}"
+                              DisplayMemberPath="Title"
+                              Margin="0,0,0,20"/>
                 </StackPanel>
 
                 <!-- Task Title -->
                 <StackPanel Margin="0,20,0,0">
                     <TextBlock Text="Task Title" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <TextBox x:Name="TaskTitleTextBox" Margin="0,0,0,20"/>
-                </StackPanel>
-
-                <!-- Due Date -->
-                <StackPanel Margin="0,0,0,20">
-                    <TextBlock Text="Due Date" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <DatePicker x:Name="DueDatePicker"/>
+                    <TextBox Text="{Binding SelectedTask.Title, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,20"/>
                 </StackPanel>
 
                 <!-- Description -->
                 <StackPanel Margin="0,0,0,20">
                     <TextBlock Text="Description" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <TextBox x:Name="DescriptionTextBox" Height="80" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+                    <TextBox Text="{Binding SelectedTask.Description, UpdateSourceTrigger=PropertyChanged}" 
+                             Height="80" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+                </StackPanel>
+
+                <!-- Start Date -->
+                <StackPanel Margin="0,0,0,20">
+                    <TextBlock Text="Start Date" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <DatePicker SelectedDate="{Binding SelectedTask.StartDate}"/>
+                </StackPanel>
+
+                <!-- Due Date -->
+                <StackPanel Margin="0,0,0,20">
+                    <TextBlock Text="Due Date" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <DatePicker SelectedDate="{Binding SelectedTask.DueDate}"/>
+                </StackPanel>
+
+                <!-- Task State -->
+                <StackPanel Margin="0,0,0,20">
+                    <TextBlock Text="Task State" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding TaskStates}"
+                              SelectedItem="{Binding SelectedTask.TaskState}"/>
+                </StackPanel>
+
+                <!-- Task Category -->
+                <StackPanel Margin="0,0,0,20">
+                    <TextBlock Text="Task Category" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding TaskCategories}"
+                              SelectedItem="{Binding SelectedTask.TaskCategory}"/>
+                </StackPanel>
+
+                <!-- Task Importance -->
+                <StackPanel Margin="0,0,0,20">
+                    <TextBlock Text="Task Importance" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding TaskImportances}"
+                              SelectedItem="{Binding SelectedTask.TaskImportance}"/>
                 </StackPanel>
 
                 <!-- Buttons Close/Save -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-                    <Button Content="Close" Background="#6c757d" Foreground="White" Margin="0,0,10,0" Click="CloseButton_Click" Height="30" Width="50"/>
-                    <Button Content="Save" Background="#007bff" Foreground="White" Click="SaveButton_Click" Width="49"/>
+                    <Button Content="Cancel" Background="#6c757d" Foreground="White" Margin="0,0,10,0" 
+                            Command="{Binding CloseCommand}" Height="30" Width="50"/>
+                    <Button Content="Save" Background="#007bff" Foreground="White" 
+                            Command="{Binding SaveCommand}" Width="49"/>
                 </StackPanel>
             </StackPanel>
         </Border>
