@@ -224,8 +224,12 @@ namespace ToDo.ViewModels
 
         private void OpenDeleteTaskWindow()
         {
-            DeleteTaskWindow deleteTaskWindow = new DeleteTaskWindow();
+            var deleteTaskViewModel = new DeleteTaskViewModel(_taskService);
+            var deleteTaskWindow = new DeleteTaskWindow(deleteTaskViewModel);
             deleteTaskWindow.ShowDialog();
+
+            // Refresh tasks after deletion
+            _ = LoadTasksAsync();
         }
 
         private void OpenEditTaskWindow()

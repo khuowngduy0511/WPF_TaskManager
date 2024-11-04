@@ -14,8 +14,7 @@
 
             <StackPanel>
                 <TextBlock Text="Select Tasks to Delete:" FontSize="16" FontWeight="Bold" Margin="10" />
-                <!-- ListBox to display tasks with checkboxes -->
-                <ListBox Name="TaskListBox" SelectionMode="Multiple" Margin="10" Height="197">
+                <ListBox ItemsSource="{Binding Tasks}" SelectionMode="Multiple" Margin="10" Height="197">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -24,10 +23,9 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <!-- Buttons for Cancel and Delete -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Content="Cancel" Width="78" Margin="10" Click="CancelButton_Click" Background="#6C757D" Foreground="White"/>
-                    <Button Content="Delete" Width="78" Margin="10" Click="DeleteButton_Click" Background="Red" Height="29" Foreground="White"/>
+                    <Button Content="Cancel" Width="78" Margin="10" Command="{Binding CancelCommand}" Background="#6C757D" Foreground="White"/>
+                    <Button Content="Delete" Width="78" Margin="10" Command="{Binding DeleteCommand}" Background="Red" Height="29" Foreground="White"/>
                 </StackPanel>
             </StackPanel>
         </Border>
