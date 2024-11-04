@@ -29,6 +29,7 @@ namespace ToDo
             ServiceCollection services = new ServiceCollection();
             ConfigureServices(services);
             serviceProvider = services.BuildServiceProvider();
+            Resources.Add("BoolToYesNoConverter", new BoolToYesNoConverter());  
         }
 
         private void ConfigureServices(ServiceCollection services)
@@ -40,16 +41,20 @@ namespace ToDo
 
             // Đăng ký DbContext với cấu hình kết nối
             services.AddDbContext<TodoDbContext>(options =>
-            {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-            });
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")),
+                ServiceLifetime.Scoped);
 
-            // Đăng ký các dịch vụ khác
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<MainWindowViewModel>();
+            services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>();
-            services.AddTransient<NewTaskWindow>();
+            services.AddTransient<NewTaskWindow>(provider =>
+    new NewTaskWindow(
+        provider.GetRequiredService<ITaskService>(),
+        provider.GetRequiredService<MainWindowViewModel>()
+    )
+);
         }
 
         protected override void OnStartup(StartupEventArgs e)

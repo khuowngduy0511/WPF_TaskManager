@@ -10,9 +10,10 @@
                 <ResourceDictionary Source="Dictionaries/Icons.xaml" />
                 <ResourceDictionary Source="Dictionaries/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>    
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <local:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
         </ResourceDictionary>
         
     </Application.Resources>
-    
+
 </Application>

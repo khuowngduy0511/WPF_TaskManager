@@ -3,7 +3,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ToDo.Repositories;
 using ToDo.Services;
 using ToDo.Views;
@@ -13,9 +15,12 @@ namespace ToDo.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+        
         private readonly ITaskService _taskService;
         private TaskEntity _selectedTask;
         private ObservableCollection<TaskEntity> _tasks;
+        private DispatcherTimer _timer;
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,30 +42,44 @@ namespace ToDo.ViewModels
         public ICommand AddTaskCommand { get; set; }
         public ICommand UpdateTaskCommand { get; set; }
         public ICommand DeleteTaskCommand { get; set; }
-
+        public ICommand RefreshCommand { get; }
+        public ICommand CompleteTaskCommand { get; }
 
         // Constructor to initialize the collection and commands
         public MainWindowViewModel(ITaskService taskService)
         {
             _taskService = taskService;
             Tasks = new ObservableCollection<TaskEntity>();
+            BindingOperations.EnableCollectionSynchronization(Tasks, new object());
+            RefreshCommand = new RelayCommand(async () => await LoadTasksAsync());
             LoadTasksCommand = new RelayCommand(async () => await LoadTasksAsync());
             AddTaskCommand = new RelayCommand(async () => await AddTaskAsync());
             UpdateTaskCommand = new RelayCommand(async () => await UpdateTaskAsync(), CanUpdateTask);
-            DeleteTaskCommand = new RelayCommand(async () => await DeleteTaskAsync(), CanDeleteTask);   
+            DeleteTaskCommand = new RelayCommand(async () => await DeleteTaskAsync(), CanDeleteTask);
+            CompleteTaskCommand = new RelayCommand<TaskEntity>(CompleteTask);
 
-            // Load tasks when ViewModel is created
+/*            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(2) // Thay đổi thời gian nếu cần
+            };
+            _timer.Tick += async (sender, args) => await LoadTasksAsync();
+            _timer.Start();*/
+
+            // Load tasks khi ViewModel được tạo
             _ = LoadTasksAsync();
         }
-        
+
 
         public ObservableCollection<TaskEntity> Tasks
         {
             get => _tasks;
             set
             {
-                _tasks = value;
-                OnPropertyChanged(nameof(Tasks));
+                if (_tasks != value)
+                {
+                    _tasks = value;
+                    OnPropertyChanged(nameof(Tasks));
+                }
             }
         }
 
@@ -77,40 +96,50 @@ namespace ToDo.ViewModels
         }
 
         // Method to load tasks into the ObservableCollection
-        private async Task LoadTasksAsync()
+        public async Task LoadTasksAsync()
         {
+            await _semaphore.WaitAsync();
             try
             {
                 var tasks = await _taskService.GetAllTasksAsync();
-                Debug.WriteLine($"Loaded {tasks.Count()} tasks");
-                Tasks.Clear();
-                foreach (var task in tasks)
+                await Application.Current.Dispatcher.InvokeAsync(() =>
                 {
-                    Tasks.Add(task);
-                    Debug.WriteLine($"Added task: {task.Title}");
-                }
+                    Tasks.Clear();
+                    foreach (var task in tasks)
+                    {
+                        Tasks.Add(task);
+                    }
+                });
+                Debug.WriteLine($"Loaded {tasks.Count()} tasks");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error loading tasks: {ex.Message}");
-                MessageBox.Show($"Error loading tasks: {ex.Message}");
+                await Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    MessageBox.Show($"Error loading tasks: {ex.Message}");
+                });
+            }
+            finally
+            {
+                _semaphore.Release();
             }
         }
-
 
 
 
 
         private async Task AddTaskAsync()
-        {
-            var newTaskWindow = new NewTaskWindow(_taskService);
-            if (newTaskWindow.ShowDialog() == true)
             {
-                var newTask = newTaskWindow.Task;
-                await _taskService.CreateTaskAsync(newTask);
-                await LoadTasksAsync();
+                var newTaskWindow = new NewTaskWindow(_taskService);
+                newTaskWindow.TaskCreated += async (sender, task) =>
+                {
+                    await LoadTasksAsync(); // Tự động refresh danh sách task
+                
+                    System.Diagnostics.Debug.WriteLine($"Task added: {task.Title}");
+                };
+                newTaskWindow.ShowDialog();
             }
-        }
 
         private async Task UpdateTaskAsync()
         {
@@ -122,6 +151,16 @@ namespace ToDo.ViewModels
                     await _taskService.UpdateTaskAsync(SelectedTask);
                     await LoadTasksAsync();
                 }
+            }
+        }
+
+        private async void CompleteTask(TaskEntity task)
+        {
+            if (task != null)
+            {
+                task.IsComplete = true;
+                await _taskService.UpdateTaskAsync(task);
+                await LoadTasksAsync(); // Refresh the task list
             }
         }
 
@@ -152,7 +191,11 @@ namespace ToDo.ViewModels
         // Methods for opening different windows
         private void OpenNewWindow()
         {
-            NewTaskWindow newTaskWindow = new NewTaskWindow(_taskService);
+            NewTaskWindow newTaskWindow = new NewTaskWindow(_taskService, this);
+            newTaskWindow.TaskCreated += async (sender, task) =>
+            {
+                await LoadTasksAsync();
+            };
             newTaskWindow.Show();
         }
 
@@ -204,7 +247,10 @@ namespace ToDo.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-
+        public async Task RefreshTasksAsync()
+        {
+            await LoadTasksAsync();
+        }
     }
 
 }

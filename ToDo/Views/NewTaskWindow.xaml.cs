@@ -1,19 +1,33 @@
 ﻿using System;
 using System.Windows;
-using ToDo.Models; // Đảm bảo rằng bạn đã thêm namespace này
+using ToDo.Models; 
 using ToDo.Services;
+using ToDo.ViewModels;
 using TaskEntity = ToDo.Models.Task; // Đặt alias cho Task trong model
+using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace ToDo.Views
 {
     public partial class NewTaskWindow : Window
     {
         private readonly ITaskService _taskService;
+        private readonly MainWindowViewModel _mainViewModel;
+        private ITaskService taskService;
 
-        public NewTaskWindow(ITaskService taskService)
+        public event EventHandler<TaskEntity> TaskCreated;
+
+        public NewTaskWindow(ITaskService taskService, MainWindowViewModel mainViewModel)
         {
             InitializeComponent();
             _taskService = taskService;
+            _mainViewModel = mainViewModel;
+            InitializeComboBoxes();
+        }
+
+        public NewTaskWindow(ITaskService taskService)
+        {
+            this.taskService = taskService;
         }
 
         private void InitializeComboBoxes()
@@ -32,7 +46,6 @@ namespace ToDo.Views
                 StartDate = StartDatePicker.SelectedDate ?? DateTime.Now,
                 DueDate = DueDatePicker.SelectedDate ?? DateTime.Now,
                 IsComplete = IsCompleteCheckBox.IsChecked ?? false,
-               
                 TaskState = (TaskState)(TaskStateComboBox.SelectedItem ?? TaskState.NotStarted),
                 TaskCategory = (TaskCategory)(TaskCategoryComboBox.SelectedItem ?? TaskCategory.Personal),
                 TaskImportance = (TaskImportance)(TaskImportanceComboBox.SelectedItem ?? TaskImportance.Medium)
@@ -43,6 +56,12 @@ namespace ToDo.Views
                 var addedTask = await _taskService.CreateTaskAsync(newTask);
                 if (addedTask != null)
                 {
+                    OnTaskCreated(addedTask);
+                    ClearInputFields();
+
+                    // Gọi trực tiếp phương thức LoadTasksAsync của MainWindowViewModel
+                    await _mainViewModel.LoadTasksAsync();
+
                     MessageBox.Show("Task added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     Close();
                 }
@@ -57,6 +76,33 @@ namespace ToDo.Views
             }
         }
 
+        protected virtual void OnTaskCreated(TaskEntity task)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                TaskCreated?.Invoke(this, task);
+            });
+        }
+        private void ClearInputFields()
+        {
+            TaskTitleTextBox.Clear();
+            DescriptionTextBox.Clear();
+            StartDatePicker.SelectedDate = null;
+            DueDatePicker.SelectedDate = null;
+            IsCompleteCheckBox.IsChecked = false;
+            TaskStateComboBox.SelectedItem = null;
+            TaskCategoryComboBox.SelectedItem = null;
+            TaskImportanceComboBox.SelectedItem = null;
+        }
+
+        private async Task RefreshTaskList()
+        {
+            // Assuming you have a reference to MainWindowViewModel
+            if (DataContext is MainWindowViewModel viewModel)
+            {
+                await viewModel.RefreshTasksAsync();
+            }
+        }
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
        
