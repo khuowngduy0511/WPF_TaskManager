@@ -42,19 +42,7 @@
                 </Viewbox>
             </Button>
 
-            <Button Style="{StaticResource SearchButton}" Height="49" Width="47" Command="{Binding IOpenSearchWindowCommand}">
-                <Viewbox Width="33" Height="25" RenderTransformOrigin="0.5,0.5">
-                    <Viewbox.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform ScaleX="-1"/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Viewbox.RenderTransform>
-                    <Path Data="{StaticResource SearchICon}" Fill="White" Height="31" Stretch="Fill" Width="49"/>
-                </Viewbox>
-            </Button>
+
         </StackPanel>
         <!--Task List Background-->
         <Rectangle Fill="{StaticResource TaskListBackground}" 
@@ -67,6 +55,8 @@
                 <RowDefinition Height="483*"/>
                 <RowDefinition Height="233*"/>
             </Grid.RowDefinitions>
+            <!--Task Label-->
+
             <!--Task Label-->
             <Label Style="{StaticResource Heading1}"
                    Content="Tasks" 
@@ -87,14 +77,59 @@
                 </Viewbox>
             </Button>
 
+            <!--Search Task Bar-->
+            <TextBox x:Name="TaskSearchBox"
+                     Style="{StaticResource TaskListSearchBox}"
+                     Grid.Row="1"
+                     Margin="20,10,75,10" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
 
+
+            <Label IsHitTestVisible="False"
+                   Content="Search Task..."
+                   Grid.Row="1"
+                   VerticalAlignment="Center"
+                   Margin="20,0,70,0"
+                   Foreground="{StaticResource Borders}"
+                   Visibility="{Binding Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=TaskSearchBox}"/>
+
+            <!--Search Button-->
+            <Border
+                Margin="370,60,15,0"
+                CornerRadius="20" Grid.RowSpan="2">
+                <Grid>
+
+                    <Button Style="{StaticResource SearchButton}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Width="40"
+                Height="40"
+                Margin="1,0,0,0"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                            Command="{Binding SearchCommand}"
+                >
+
+                        <Viewbox Width="395" Height="30" RenderTransformOrigin="0.5,0.5">
+                            <Viewbox.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="-1"/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Viewbox.RenderTransform>
+                            <Path Data="{StaticResource SearchTaskICon}" Fill="{StaticResource Borders}"/>
+                        </Viewbox>
+                    </Button>
+                </Grid>
+            </Border>
 
             <!--List View For Task Item-->
             <ListView Grid.Row="2"
           Background="Transparent"
           Margin="0,20,0,64"
           BorderBrush="Transparent"
-          ItemsSource="{Binding Tasks}" SelectedItem="{Binding SelectedTask, Mode=TwoWay}" Grid.RowSpan="2"
+                      ItemsSource="{Binding TasksView}" SelectedItem="{Binding SelectedTask, Mode=TwoWay}" Grid.RowSpan="2"
                       >
 
                 <ListView.ItemTemplate>
@@ -102,11 +137,12 @@
                         <StackPanel>
                             <TextBlock Text="{Binding Title}" />
                             <TextBlock Text="{Binding Description}" />
-                            <TextBlock Text="{Binding DueDate, StringFormat={}{0:dd/MM/yyyy}}" />
+                            <TextBlock Text="{Binding DueDate, StringFormat=\{0:dd/MM/yyyy\}}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
 
         </Grid>
 
@@ -162,7 +198,8 @@
                 Width="120"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Margin="0,20,0,0"/>
+                Margin="0,20,0,0"
+                        Command="{Binding CompleteTaskCommand}"/>
             </StackPanel>
         </Grid>
 

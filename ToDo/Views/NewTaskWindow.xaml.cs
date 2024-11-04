@@ -45,7 +45,6 @@ namespace ToDo.Views
                 Description = DescriptionTextBox.Text,
                 StartDate = StartDatePicker.SelectedDate ?? DateTime.Now,
                 DueDate = DueDatePicker.SelectedDate ?? DateTime.Now,
-                IsComplete = IsCompleteCheckBox.IsChecked ?? false,
                 TaskState = (TaskState)(TaskStateComboBox.SelectedItem ?? TaskState.NotStarted),
                 TaskCategory = (TaskCategory)(TaskCategoryComboBox.SelectedItem ?? TaskCategory.Personal),
                 TaskImportance = (TaskImportance)(TaskImportanceComboBox.SelectedItem ?? TaskImportance.Medium)
@@ -89,20 +88,11 @@ namespace ToDo.Views
             DescriptionTextBox.Clear();
             StartDatePicker.SelectedDate = null;
             DueDatePicker.SelectedDate = null;
-            IsCompleteCheckBox.IsChecked = false;
             TaskStateComboBox.SelectedItem = null;
             TaskCategoryComboBox.SelectedItem = null;
             TaskImportanceComboBox.SelectedItem = null;
         }
 
-        private async Task RefreshTaskList()
-        {
-            // Assuming you have a reference to MainWindowViewModel
-            if (DataContext is MainWindowViewModel viewModel)
-            {
-                await viewModel.RefreshTasksAsync();
-            }
-        }
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
        

@@ -30,8 +30,6 @@
                     <TextBlock Text="Due Date" FontWeight="Bold" Margin="0,0,0,5"/>
                     <DatePicker x:Name="DueDatePicker" Margin="0,0,0,15"/>
 
-                    <CheckBox x:Name="IsCompleteCheckBox" Content="Is Complete" Margin="0,0,0,15"/>
-
 
                     <TextBlock Text="Task State" FontWeight="Bold" Margin="0,0,0,5"/>
                     <ComboBox x:Name="TaskStateComboBox" Margin="0,0,0,15"/>

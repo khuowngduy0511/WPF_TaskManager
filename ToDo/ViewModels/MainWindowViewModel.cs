@@ -1,89 +1,62 @@
-﻿﻿using System;
-using System.Collections.ObjectModel; 
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Windows;
+﻿using System;
 using System.Windows.Data;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
-using System.Windows.Threading;
-using ToDo.Repositories;
+using System.Linq;
+using TaskEntity = ToDo.Models.Task;
 using ToDo.Services;
 using ToDo.Views;
-using TaskEntity = ToDo.Models.Task;
+using System.Windows;
 
 namespace ToDo.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
-        
         private readonly ITaskService _taskService;
-        private TaskEntity _selectedTask;
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
         private ObservableCollection<TaskEntity> _tasks;
-        private DispatcherTimer _timer;
+        private TaskEntity _selectedTask;
+        private string _searchText;
+        private ICollectionView _tasksView;
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        // Commands for opening different windows
+        // Commands
         public ICommand IOpenNewWindowCommand => new RelayCommand(OpenNewWindow);
-        public ICommand IOpenSearchWindowCommand => new RelayCommand(OpenSearchWindow);
         public ICommand IOpenDeleteWindowCommand => new RelayCommand(OpenDeleteTaskWindow);
         public ICommand IOpenEditTaskWindowCommand => new RelayCommand(OpenEditTaskWindow);
         public ICommand iOpenCalendarCommand => new RelayCommand(OpenCalendarView);
         public ICommand iOpenTaskCompletedViewCommand => new RelayCommand(OpenTaskCompletedView);
         public ICommand IOpenCriticalWindowCommand => new RelayCommand(OpenCriticalWindow);
         public ICommand IOpenSortlWindowCommand => new RelayCommand(OpenSortWindow);
-
-        public ICommand FilterHighPriorityCommand { get; set; }
-
-        // Command to load tasks when the List Icon is clicked
-        public ICommand LoadTasksCommand { get; set; }
-        public ICommand AddTaskCommand { get; set; }
-        public ICommand UpdateTaskCommand { get; set; }
-        public ICommand DeleteTaskCommand { get; set; }
-        public ICommand RefreshCommand { get; }
+        public ICommand LoadTasksCommand { get; }
+        public ICommand SearchCommand { get; }
         public ICommand CompleteTaskCommand { get; }
 
-        // Constructor to initialize the collection and commands
-        public MainWindowViewModel(ITaskService taskService)
-        {
-            _taskService = taskService;
-            Tasks = new ObservableCollection<TaskEntity>();
-            BindingOperations.EnableCollectionSynchronization(Tasks, new object());
-            RefreshCommand = new RelayCommand(async () => await LoadTasksAsync());
-            LoadTasksCommand = new RelayCommand(async () => await LoadTasksAsync());
-            AddTaskCommand = new RelayCommand(async () => await AddTaskAsync());
-            UpdateTaskCommand = new RelayCommand(async () => await UpdateTaskAsync(), CanUpdateTask);
-            DeleteTaskCommand = new RelayCommand(async () => await DeleteTaskAsync(), CanDeleteTask);
-            CompleteTaskCommand = new RelayCommand<TaskEntity>(CompleteTask);
-
-/*            _timer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(2) // Thay đổi thời gian nếu cần
-            };
-            _timer.Tick += async (sender, args) => await LoadTasksAsync();
-            _timer.Start();*/
-
-            // Load tasks khi ViewModel được tạo
-            _ = LoadTasksAsync();
-        }
-
-
+        // Properties
         public ObservableCollection<TaskEntity> Tasks
         {
             get => _tasks;
             set
             {
-                if (_tasks != value)
+                _tasks = value;
+                OnPropertyChanged(nameof(Tasks));
+                TasksView = CollectionViewSource.GetDefaultView(_tasks);
+                if (TasksView != null)
                 {
-                    _tasks = value;
-                    OnPropertyChanged(nameof(Tasks));
+                    TasksView.Filter = TaskFilter;
                 }
             }
         }
 
-
+        public ICollectionView TasksView
+        {
+            get => _tasksView;
+            set
+            {
+                _tasksView = value;
+                OnPropertyChanged(nameof(TasksView));
+            }
+        }
 
         public TaskEntity SelectedTask
         {
@@ -95,30 +68,95 @@ namespace ToDo.ViewModels
             }
         }
 
-        // Method to load tasks into the ObservableCollection
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged(nameof(SearchText));
+                TasksView?.Refresh();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // Constructor
+        public MainWindowViewModel(ITaskService taskService)
+        {
+            _taskService = taskService;
+            _tasks = new ObservableCollection<TaskEntity>();
+            TasksView = CollectionViewSource.GetDefaultView(_tasks);
+            if (TasksView != null)
+            {
+                TasksView.Filter = TaskFilter;
+            }
+
+            LoadTasksCommand = new RelayCommand(async () => await LoadTasksAsync());
+            SearchCommand = new RelayCommand(ExecuteSearch);
+            CompleteTaskCommand = new RelayCommand(ExecuteCompleteTask, CanExecuteCompleteTask);
+
+            // Initial load of tasks
+            _ = LoadTasksAsync();
+        }
+
+        private bool CanExecuteCompleteTask()
+        {
+            return SelectedTask != null && !SelectedTask.IsComplete;
+        }
+
+        private async void ExecuteCompleteTask()
+        {
+            if (SelectedTask != null)
+            {
+                try
+                {
+                    SelectedTask.IsComplete = true;
+                    await _taskService.UpdateTaskAsync(SelectedTask);
+                    Tasks.Remove(SelectedTask);
+                    SelectedTask = null;
+                    OnPropertyChanged(nameof(SelectedTask));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error completing task: {ex.Message}");
+                }
+            }
+        }
+
+        public async Task RefreshTasksAsync()
+        {
+            await LoadTasksAsync();
+        }
+        // Methods
+        private bool TaskFilter(object item)
+        {
+            if (string.IsNullOrEmpty(SearchText))
+                return true;
+            if (item is TaskEntity task)
+            {
+                return task.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
+            }
+            return false;
+        }
+
+        private void ExecuteSearch()
+        {
+            TasksView?.Refresh();
+        }
+
         public async Task LoadTasksAsync()
         {
             await _semaphore.WaitAsync();
             try
             {
                 var tasks = await _taskService.GetAllTasksAsync();
-                await Application.Current.Dispatcher.InvokeAsync(() =>
-                {
-                    Tasks.Clear();
-                    foreach (var task in tasks)
-                    {
-                        Tasks.Add(task);
-                    }
-                });
-                Debug.WriteLine($"Loaded {tasks.Count()} tasks");
+                Tasks = new ObservableCollection<TaskEntity>(tasks);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error loading tasks: {ex.Message}");
-                await Application.Current.Dispatcher.InvokeAsync(() =>
-                {
-                    MessageBox.Show($"Error loading tasks: {ex.Message}");
-                });
+                // Handle error...
+                MessageBox.Show($"Error loading tasks: {ex.Message}");
             }
             finally
             {
@@ -126,84 +164,25 @@ namespace ToDo.ViewModels
             }
         }
 
-
-
-
-        private async Task AddTaskAsync()
-            {
-                var newTaskWindow = new NewTaskWindow(_taskService);
-                newTaskWindow.TaskCreated += async (sender, task) =>
-                {
-                    await LoadTasksAsync(); // Tự động refresh danh sách task
-                
-                    System.Diagnostics.Debug.WriteLine($"Task added: {task.Title}");
-                };
-                newTaskWindow.ShowDialog();
-            }
-
-        private async Task UpdateTaskAsync()
+        public void AddNewTask(TaskEntity newTask)
         {
-            if (SelectedTask != null)
-            {
-                var editWindow = new EditTaskWindow(SelectedTask);
-                if (editWindow.ShowDialog() == true)
-                {
-                    await _taskService.UpdateTaskAsync(SelectedTask);
-                    await LoadTasksAsync();
-                }
-            }
+            Tasks.Add(newTask);
+            TasksView?.Refresh();
         }
 
-        private async void CompleteTask(TaskEntity task)
+        protected virtual void OnPropertyChanged(string propertyName)
         {
-            if (task != null)
-            {
-                task.IsComplete = true;
-                await _taskService.UpdateTaskAsync(task);
-                await LoadTasksAsync(); // Refresh the task list
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private async Task DeleteTaskAsync()
-        {
-            if (SelectedTask != null)
-            {
-                var result = MessageBox.Show("Are you sure you want to delete this task?",
-                    "Confirm Delete", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.Yes)
-                {
-                    await _taskService.DeleteTaskAsync(SelectedTask.id);
-                    await LoadTasksAsync();
-                }
-            }
-        }
-
-        private bool CanUpdateTask()
-        {
-            return SelectedTask != null;
-        }
-
-        private bool CanDeleteTask()
-        {
-            return SelectedTask != null;
-        }
-
-        // Methods for opening different windows
+        // Existing window opening methods
         private void OpenNewWindow()
         {
             NewTaskWindow newTaskWindow = new NewTaskWindow(_taskService, this);
-            newTaskWindow.TaskCreated += async (sender, task) =>
-            {
-                await LoadTasksAsync();
-            };
             newTaskWindow.Show();
         }
 
-        private void OpenSearchWindow()
-        {
-            SearchWindow searchWindow = new SearchWindow();
-            searchWindow.ShowDialog();
-        }
+
 
         private void OpenDeleteTaskWindow()
         {
@@ -240,17 +219,5 @@ namespace ToDo.ViewModels
             SortTask sortWindow = new SortTask();
             sortWindow.Show();
         }
-
-        // Helper method to notify when properties change (for data binding)
-        protected virtual void  OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public async Task RefreshTasksAsync()
-        {
-            await LoadTasksAsync();
-        }
     }
-
 }
