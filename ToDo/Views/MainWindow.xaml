@@ -10,6 +10,7 @@
         Top="0" Left="0"
         MinWidth="1150" MinHeight="450"
         Title="MainWindow" Height="832" Width="1200">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80" />
@@ -93,16 +94,17 @@
           Margin="0,20,0,20"
           BorderBrush="Transparent"
           ItemsSource="{Binding Tasks}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16"/>
-                            <TextBlock Text="{Binding DueDate, StringFormat=Due: {0:MM/dd/yyyy}}" FontSize="12" Foreground="Gray"/>
-                            <TextBlock Text="{Binding Description}" FontSize="14" Foreground="DarkGray"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+               
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Title}" />
+                                <TextBlock Text="{Binding Description}" />
+                                <TextBlock Text="{Binding DueDate, StringFormat={}{0:dd/MM/yyyy}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
 
         </Grid>
 

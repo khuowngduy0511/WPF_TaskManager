@@ -1,6 +1,7 @@
 ﻿﻿using System;
 using System.Collections.ObjectModel; 
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using ToDo.Repositories;
@@ -14,6 +15,7 @@ namespace ToDo.ViewModels
     {
         private readonly ITaskService _taskService;
         private TaskEntity _selectedTask;
+        private ObservableCollection<TaskEntity> _tasks;
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -45,12 +47,24 @@ namespace ToDo.ViewModels
             LoadTasksCommand = new RelayCommand(async () => await LoadTasksAsync());
             AddTaskCommand = new RelayCommand(async () => await AddTaskAsync());
             UpdateTaskCommand = new RelayCommand(async () => await UpdateTaskAsync(), CanUpdateTask);
-            DeleteTaskCommand = new RelayCommand(async () => await DeleteTaskAsync(), CanDeleteTask);
+            DeleteTaskCommand = new RelayCommand(async () => await DeleteTaskAsync(), CanDeleteTask);   
 
             // Load tasks when ViewModel is created
             _ = LoadTasksAsync();
         }
-        public ObservableCollection<TaskEntity> Tasks { get; set; }
+        
+
+        public ObservableCollection<TaskEntity> Tasks
+        {
+            get => _tasks;
+            set
+            {
+                _tasks = value;
+                OnPropertyChanged(nameof(Tasks));
+            }
+        }
+
+
 
         public TaskEntity SelectedTask
         {
@@ -65,17 +79,31 @@ namespace ToDo.ViewModels
         // Method to load tasks into the ObservableCollection
         private async Task LoadTasksAsync()
         {
-            var tasks = await _taskService.GetAllTasksAsync();
-            Tasks.Clear();
-            foreach (var task in tasks)
+            try
             {
-                Tasks.Add(task);
+                var tasks = await _taskService.GetAllTasksAsync();
+                Debug.WriteLine($"Loaded {tasks.Count()} tasks");
+                Tasks.Clear();
+                foreach (var task in tasks)
+                {
+                    Tasks.Add(task);
+                    Debug.WriteLine($"Added task: {task.Title}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading tasks: {ex.Message}");
+                MessageBox.Show($"Error loading tasks: {ex.Message}");
             }
         }
 
+
+
+
+
         private async Task AddTaskAsync()
         {
-            var newTaskWindow = new NewTaskWindow();
+            var newTaskWindow = new NewTaskWindow(_taskService);
             if (newTaskWindow.ShowDialog() == true)
             {
                 var newTask = newTaskWindow.Task;
@@ -124,7 +152,7 @@ namespace ToDo.ViewModels
         // Methods for opening different windows
         private void OpenNewWindow()
         {
-            NewTaskWindow newTaskWindow = new NewTaskWindow();
+            NewTaskWindow newTaskWindow = new NewTaskWindow(_taskService);
             newTaskWindow.Show();
         }
 
@@ -171,7 +199,7 @@ namespace ToDo.ViewModels
         }
 
         // Helper method to notify when properties change (for data binding)
-        protected virtual void OnPropertyChanged(string propertyName)
+        protected virtual void  OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

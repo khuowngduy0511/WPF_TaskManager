@@ -13,6 +13,7 @@ using ToDo.Data;
 using ToDo.Repositories;
 using ToDo.Services;
 using ToDo.ViewModels;
+using ToDo.Views;
 
 namespace ToDo
 {
@@ -32,26 +33,23 @@ namespace ToDo
 
         private void ConfigureServices(ServiceCollection services)
         {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            // Đăng ký DbContext với cấu hình kết nối
             services.AddDbContext<TodoDbContext>(options =>
             {
-                IConfiguration configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .Build();
-
-
-                services.AddDbContext<TodoDbContext>(options =>
-                {
-                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-                });
-
-                services.AddSingleton<MainWindow>();
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
 
+            // Đăng ký các dịch vụ khác
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<MainWindowViewModel>();
             services.AddSingleton<MainWindow>();
+            services.AddTransient<NewTaskWindow>();
         }
 
         protected override void OnStartup(StartupEventArgs e)

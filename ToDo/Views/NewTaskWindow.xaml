@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ToDo.Views"
         mc:Ignorable="d"
-        Title="NewTaskWindow" Height="450" Width="800"
+        Title="New Task" Height="800" Width="1000"
         Background="#f8f9fa" WindowStartupLocation="CenterScreen">
 
     <Grid>
@@ -13,33 +13,43 @@
             <Border.Effect>
                 <DropShadowEffect Color="#FF000000" BlurRadius="10" ShadowDepth="5"/>
             </Border.Effect>
-            <StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                    <TextBlock Text="Add New Task" FontSize="18" FontWeight="Bold" 
-                               VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="Add New Task" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
 
-                </StackPanel>
-
-                <StackPanel Margin="0,20,0,0">
                     <TextBlock Text="Task Title" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <TextBox x:Name="TaskTitleTextBox" Margin="0,0,0,20"/>
-
-                    <TextBlock Text="Due Date" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <DatePicker x:Name="DueDatePicker" Margin="0,0,0,20"/>
+                    <TextBox x:Name="TaskTitleTextBox" Margin="0,0,0,15"/>
 
                     <TextBlock Text="Description" FontWeight="Bold" Margin="0,0,0,5"/>
                     <TextBox x:Name="DescriptionTextBox" Height="80" AcceptsReturn="True" 
-                               VerticalScrollBarVisibility="Auto"/>
-                </StackPanel>
+                             VerticalScrollBarVisibility="Auto" Margin="0,0,0,15"/>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" 
-                            Margin="0,20,0,0">
-                    <Button Content="Close" Background="#6c757d" Foreground="White" 
-                            Margin="0,0,10,0" Click="CloseButton_Click"/>
-                    <Button Content="Add" Background="#007bff" Foreground="White" 
-                            Click="AddButton_Click"/>
+                    <TextBlock Text="Start Date" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <DatePicker x:Name="StartDatePicker" Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Due Date" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <DatePicker x:Name="DueDatePicker" Margin="0,0,0,15"/>
+
+                    <CheckBox x:Name="IsCompleteCheckBox" Content="Is Complete" Margin="0,0,0,15"/>
+
+
+                    <TextBlock Text="Task State" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="TaskStateComboBox" Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Task Category" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="TaskCategoryComboBox" Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Task Importance" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="TaskImportanceComboBox" Margin="0,0,0,15"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                        <Button Content="Cancel" Background="#6c757d" Foreground="White" 
+                                Margin="0,0,10,0" Padding="15,5" Click="CloseButton_Click"/>
+                        <Button Content="Add Task" Background="#007bff" Foreground="White" 
+                                Padding="15,5" Click="AddButton_Click"/>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </ScrollViewer>
         </Border>
     </Grid>
 </Window>

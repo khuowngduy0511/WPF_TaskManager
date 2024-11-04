@@ -21,7 +21,15 @@ namespace ToDo.Services
 
         public async Task<IEnumerable<TaskEntity>> GetAllTasksAsync()
         {
-            return await _taskRepository.GetAllTasksAsync();
+            try
+            {
+                return await _taskRepository.GetAllTasksAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log error
+                throw;
+            }
         }
 
         public async Task<TaskEntity> GetTaskByIdAsync(int id)
@@ -39,10 +47,6 @@ namespace ToDo.Services
             return await _taskRepository.UpdateTaskAsync(task);
         }
 
-        public async System.Threading.Tasks.Task DeleteTaskAsync(int id)
-        {
-            await _taskRepository.DeleteTaskAsync(id);
-        }
 
         public async Task<IEnumerable<TaskEntity>> GetCriticalTasksAsync()
         {
@@ -54,9 +58,9 @@ namespace ToDo.Services
             return await _taskRepository.SearchTasksAsync(searchTerm);
         }
 
-        System.Threading.Tasks.Task ITaskService.DeleteTaskAsync(int id)
+        public async System.Threading.Tasks.Task DeleteTaskAsync(int id)
         {
-            throw new NotImplementedException();
+            await _taskRepository.DeleteTaskAsync(id);
         }
     }
 }

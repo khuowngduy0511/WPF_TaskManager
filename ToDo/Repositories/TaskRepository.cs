@@ -66,31 +66,5 @@ namespace ToDo.Repositories
                            t.Description.Contains(searchTerm))
                 .ToListAsync();
         }
-
-        Task<IEnumerable<Models.Task>> ITaskRepository.GetAllTasksAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Models.Task> ITaskRepository.GetTaskByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        Task<IEnumerable<Models.Task>> ITaskRepository.GetCriticalTasksAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IEnumerable<Models.Task>> ITaskRepository.SearchTasksAsync(string searchTerm)
-        {
-            throw new NotImplementedException();
-        }
-
-        System.Threading.Tasks.Task ITaskRepository.DeleteTaskAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -1,53 +1,68 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using ToDo.Models;
-using Task = ToDo.Models.Task;
+using ToDo.Models; // Đảm bảo rằng bạn đã thêm namespace này
+using ToDo.Services;
+using TaskEntity = ToDo.Models.Task; // Đặt alias cho Task trong model
 
 namespace ToDo.Views
 {
-    /// <summary>
-    /// Interaction logic for NewTaskWindow.xaml
-    /// </summary>
     public partial class NewTaskWindow : Window
     {
+        private readonly ITaskService _taskService;
 
-        public NewTaskWindow()
+        public NewTaskWindow(ITaskService taskService)
         {
             InitializeComponent();
+            _taskService = taskService;
         }
 
-        public Task Task { get; private set; }
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        private void InitializeComboBoxes()
         {
-            this.Close();
+            TaskStateComboBox.ItemsSource = Enum.GetValues(typeof(TaskState));
+            TaskCategoryComboBox.ItemsSource = Enum.GetValues(typeof(TaskCategory));
+            TaskImportanceComboBox.ItemsSource = Enum.GetValues(typeof(TaskImportance));
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
+        private async void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            Task = new Task
+            var newTask = new TaskEntity
             {
                 Title = TaskTitleTextBox.Text,
                 Description = DescriptionTextBox.Text,
+                StartDate = StartDatePicker.SelectedDate ?? DateTime.Now,
                 DueDate = DueDatePicker.SelectedDate ?? DateTime.Now,
-                StartDate = DateTime.Now,
-                TaskState = TaskState.NotStarted
+                IsComplete = IsCompleteCheckBox.IsChecked ?? false,
+               
+                TaskState = (TaskState)(TaskStateComboBox.SelectedItem ?? TaskState.NotStarted),
+                TaskCategory = (TaskCategory)(TaskCategoryComboBox.SelectedItem ?? TaskCategory.Personal),
+                TaskImportance = (TaskImportance)(TaskImportanceComboBox.SelectedItem ?? TaskImportance.Medium)
             };
 
-            DialogResult = true;
+            try
+            {
+                var addedTask = await _taskService.CreateTaskAsync(newTask);
+                if (addedTask != null)
+                {
+                    MessageBox.Show("Task added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to add task.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+       
             Close();
         }
 
+        public TaskEntity Task { get; private set; }
     }
 }

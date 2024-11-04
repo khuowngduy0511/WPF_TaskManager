@@ -13,6 +13,7 @@ namespace ToDo.Data
     public class TodoDbContext : DbContext
     {
         public DbSet<TaskEntity> Tasks { get; set; }
+        public TodoDbContext() { }
 
         public TodoDbContext(DbContextOptions<TodoDbContext> options)
     : base(options)
