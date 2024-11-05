@@ -14,5 +14,7 @@ namespace ToDo.Repositories
         System.Threading.Tasks.Task DeleteTaskAsync(int id);
         Task<IEnumerable<TaskEntity>> GetCriticalTasksAsync();
         Task<IEnumerable<TaskEntity>> SearchTasksAsync(string searchTerm);
+        Task<IEnumerable<TaskEntity>> GetCompletedTasksAsync();
+        IEnumerable<TaskEntity> GetTasksDueInMonth(int year, int month);
     }
 }

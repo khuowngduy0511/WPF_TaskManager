@@ -73,5 +73,15 @@ namespace ToDo.Services
         {
             await _taskRepository.DeleteTaskAsync(id);
         }
+
+        public async Task<IEnumerable<TaskEntity>> GetCompletedTasksAsync()
+        {
+            return await _taskRepository.GetCompletedTasksAsync();
+        }
+
+        public IEnumerable<TaskEntity> GetTasksDueInMonth(int year, int month)
+        {
+            return _taskRepository.GetTasksDueInMonth(year, month);
+        }
     }
 }

@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ToDo.Views"
         mc:Ignorable="d"
-        Title="TaskCompletedView" Height="450" Width="800"
-        WindowStartupLocation="CenterScreen">
+        Title="Completed Tasks" Height="500" Width="900"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -23,13 +23,13 @@
                 </Viewbox>
             </Button>
 
-            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47" Command="{Binding iOpenTaskCompletedViewCommand}">
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
                 <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
                     <Path Data="{StaticResource TickIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
                 </Viewbox>
             </Button>
 
-            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47" Command="{Binding iOpenCalendarCommand}">
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
                 <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
                     <Path Data="{StaticResource TimeIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
                 </Viewbox>
@@ -50,11 +50,23 @@
                   ItemsSource="{Binding CompletedTasks}" 
                   AutoGenerateColumns="False" 
                   Margin="10,50,10,10" 
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  IsReadOnly="True">
             <DataGrid.Columns>
 
                 <!-- Task Title Column -->
                 <DataGridTextColumn Binding="{Binding Title}" Header="Task Title" Width="*" >
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+
+                <!-- Start Date Column -->
+                <DataGridTextColumn Binding="{Binding StartDate}" Header="Start Date" Width="*" >
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="FontWeight" Value="Bold" />
@@ -75,8 +87,19 @@
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
 
-                <!-- Completed Date Column -->
-                <DataGridTextColumn Binding="{Binding CompletedDate}" Header="Completed Date" Width="*" >
+                <!-- TaskState Column -->
+                <DataGridTextColumn Binding="{Binding TaskState}" Header="Status" Width="*" >
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+
+                <!-- Task Importance Column -->
+                <DataGridTextColumn Binding="{Binding TaskImportance}" Header="Priority" Width="*" >
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="FontWeight" Value="Bold" />
@@ -97,7 +120,7 @@
                     </DataGridTemplateColumn.HeaderStyle>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Restore" 
+                            <Button Content="Restore" Background="LightBlue"
                                     Command="{Binding DataContext.RestoreTaskCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
                                     CommandParameter="{Binding}"/>
                         </DataTemplate>

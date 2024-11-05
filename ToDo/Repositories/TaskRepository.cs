@@ -76,5 +76,19 @@ namespace ToDo.Repositories
                            t.Description.Contains(searchTerm))
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<TaskEntity>> GetCompletedTasksAsync()
+        {
+            return await _context.Tasks
+                .Where(t => t.IsComplete)
+                .ToListAsync();
+        }
+
+        public IEnumerable<TaskEntity> GetTasksDueInMonth(int year, int month)
+        {
+            return _context.Tasks
+                .Where(t => t.DueDate.Year == year && t.DueDate.Month == month && !t.IsComplete)
+                .ToList();
+        }
     }
 }
