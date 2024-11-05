@@ -48,9 +48,7 @@ namespace ToDo
             services.AddTransient<SortTaskViewModel>();
             services.AddTransient<SortTask>();
 
-
             services.AddTransient<CriticalTaskViewModel>();
-
 
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ITaskService, TaskService>();
@@ -62,15 +60,23 @@ namespace ToDo
                 var criticalWindowFactory = new Func<CriticalWindow>(() => sp.GetRequiredService<CriticalWindow>());
                 return new MainWindowViewModel(taskService, sortTaskViewModelFactory, criticalWindowFactory);
             });
+
+            // Thêm đăng ký cho TaskCompletedViewModel
+            services.AddTransient<TaskCompletedViewModel>(provider =>
+                new TaskCompletedViewModel(
+                    provider.GetRequiredService<ITaskService>(),
+                    provider.GetRequiredService<MainWindowViewModel>()
+                )
+            );
+
             services.AddSingleton<MainWindow>();
             services.AddTransient<NewTaskWindow>(provider =>
-    new NewTaskWindow(
-        provider.GetRequiredService<ITaskService>(),
-        provider.GetRequiredService<MainWindowViewModel>()
+                new NewTaskWindow(
+                    provider.GetRequiredService<ITaskService>(),
+                    provider.GetRequiredService<MainWindowViewModel>()
                 )
             );
             services.AddTransient<CriticalWindow>();
-
         }
 
         protected override void OnStartup(StartupEventArgs e)

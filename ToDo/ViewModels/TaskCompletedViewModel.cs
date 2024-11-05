@@ -12,14 +12,17 @@ namespace ToDo.ViewModels
     public class TaskCompletedViewModel : INotifyPropertyChanged
     {
         private readonly ITaskService _taskService;
+        private readonly MainWindowViewModel _mainViewModel;
+
 
         public ObservableCollection<TaskEntity> CompletedTasks { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public TaskCompletedViewModel(ITaskService taskService)
+        public TaskCompletedViewModel(ITaskService taskService, MainWindowViewModel mainViewModel)
         {
             _taskService = taskService;
+            _mainViewModel = mainViewModel;
             CompletedTasks = new ObservableCollection<TaskEntity>();
             LoadCompletedTasksAsync();
             RestoreTaskCommand = new RelayCommand<TaskEntity>(RestoreTask);
@@ -41,23 +44,23 @@ namespace ToDo.ViewModels
         {
             if (task != null)
             {
-                // Show confirmation dialog
                 var result = MessageBox.Show("Are you sure you want to restore this task?",
                                               "Confirm Restore",
                                               MessageBoxButton.YesNo,
                                               MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    // Show state selection dialog
-                    var selectedState = ShowStateSelectionDialog(); // Call to the method that shows the dialog
+                    var selectedState = ShowStateSelectionDialog();
                     if (selectedState.HasValue)
                     {
-                        task.IsComplete = false;  // Mark the task as not completed
-                        task.TaskState = selectedState.Value; // Set the task state to user-selected state
-                        await _taskService.UpdateTaskAsync(task); // Update the task in the database
-                        CompletedTasks.Remove(task);  // Remove the task from the completed list
+                        task.IsComplete = false;
+                        task.TaskState = selectedState.Value;
+                        await _taskService.UpdateTaskAsync(task);
+                        CompletedTasks.Remove(task);
 
-                        // Display success message
+                        // Cập nhật danh sách task trong MainWindowViewModel
+                        await _mainViewModel.RefreshTasksAsync();
+
                         MessageBox.Show("Task restored successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }

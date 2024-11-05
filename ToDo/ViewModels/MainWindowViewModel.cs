@@ -253,10 +253,10 @@ namespace ToDo.ViewModels
 
         private void OpenTaskCompletedView()
         {
-            TaskCompletedView taskCompletedView = new TaskCompletedView(_taskService);
+            var taskCompletedViewModel = new TaskCompletedViewModel(_taskService, this);
+            var taskCompletedView = new TaskCompletedView(taskCompletedViewModel);
             taskCompletedView.Show();
         }
-
         private void OpenCriticalWindow()
         {
             var criticalWindow = _criticalWindowFactory();

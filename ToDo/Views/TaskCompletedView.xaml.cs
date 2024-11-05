@@ -6,10 +6,10 @@ namespace ToDo.Views
 {
     public partial class TaskCompletedView : Window
     {
-        public TaskCompletedView(ITaskService taskService)
+        public TaskCompletedView(TaskCompletedViewModel viewModel)
         {
             InitializeComponent();
-            DataContext = new TaskCompletedViewModel(taskService);
+            DataContext = viewModel;
         }
     }
 }
