@@ -247,13 +247,13 @@ namespace ToDo.ViewModels
 
         private void OpenCalendarView()
         {
-            CalendarView calendarView = new CalendarView();
+            CalendarView calendarView = new CalendarView(_taskService);
             calendarView.Show();
         }
 
         private void OpenTaskCompletedView()
         {
-            TaskCompletedView taskCompletedView = new TaskCompletedView();
+            TaskCompletedView taskCompletedView = new TaskCompletedView(_taskService);
             taskCompletedView.Show();
         }
 

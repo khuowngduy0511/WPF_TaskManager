@@ -4,8 +4,41 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="CalendarView" Height="450" Width="800"
-        WindowStartupLocation="CenterScreen">
+        Title="Calendar" Height="600" Width="1000" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <Style x:Key="NavigationButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#007ACC" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Padding" Value="15,8" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#005B9C" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#004B8A" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -13,77 +46,92 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Rectangle Fill="{StaticResource AccentDark}" />
-        <StackPanel Margin="10,15,10,10">
+        <!-- Navigation Sidebar -->
+        <StackPanel Background="{StaticResource AccentDark}" Grid.Column="0">
             <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
                 <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
                     <Path Data="{StaticResource ListIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
                 </Viewbox>
             </Button>
-
-            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47" Command="{Binding iOpenTaskCompletedViewCommand}">
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
                 <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
                     <Path Data="{StaticResource TickIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
                 </Viewbox>
             </Button>
-
-            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47" Command="{Binding iOpenCalendarCommand}">
+            <Button Style="{StaticResource TaskManageNavButton}" Height="49" Width="47">
                 <Viewbox Width="30" Height="30" Margin="7,6,8,-9">
                     <Path Data="{StaticResource TimeIcon}" Fill="White" Height="22" Stretch="Fill" Width="35"/>
                 </Viewbox>
             </Button>
         </StackPanel>
 
-        <!-- Calendar Content -->
-        <Grid Grid.Column="1" Margin="10,10,10,10">
+        <!-- Main Calendar Content -->
+        <Grid Grid.Column="1" Margin="10">
             <Grid.RowDefinitions>
-                <!-- Row for Tasks Label -->
-                <RowDefinition Height="Auto"/>
-                <!-- Row for Calendar -->
-                <RowDefinition Height="Auto"/>
-                <!-- Row for Week Display -->
-                <RowDefinition Height="Auto"/>
-                <!-- Row for Calendar Display -->
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!-- Tasks Label -->
-            <Label Content="Upcoming"
-                   Style="{StaticResource Heading1}" 
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   Margin="0,10,0,0"
-                   Grid.Row="0"
-                   IsHitTestVisible="False"/>
-
-            <!-- Month and Year Selection -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0" Grid.Row="1">
-                <TextBlock Name="MonthYearTextBlock" FontSize="20" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <ToggleButton Name="ToggleCalendarButton" Content="▼" Width="30" Height="30" IsChecked="False" />
+            <!-- Navigation Controls for the Month -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10">
+                <Button Content="Previous" Command="{Binding PreviousMonthCommand}" 
+                        Style="{StaticResource NavigationButtonStyle}" />
+                <TextBlock Text="{Binding CurrentMonthYearDisplay}" FontSize="16" FontWeight="Bold" Margin="10,0" />
+                <Button Content="Next" Command="{Binding NextMonthCommand}" 
+                        Style="{StaticResource NavigationButtonStyle}" />
+                <Button Content="Today" Command="{Binding TodayCommand}" 
+                        Style="{StaticResource NavigationButtonStyle}" />
             </StackPanel>
 
-            <!-- Built-in WPF Calendar -->
-            <Calendar Name="MainCalendar" Grid.Row="2" DisplayDate="10/1/2024" Visibility="Collapsed" SelectedDatesChanged="OnCalendarDateSelected"/>
-
-            <!-- Week Display -->
-            <Grid Name="WeekDisplay" Grid.Row="3" Visibility="Collapsed" Margin="10,10,10,0">
-                <!-- Columns for the days of the week -->
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <!-- Rows for day headers and date displays -->
+            <!-- Calendar Grid -->
+            <Grid Grid.Row="1" Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <!-- For day names -->
-                    <RowDefinition Height="Auto" />
-                    <!-- For dates -->
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+
+                <!-- Days of the Week Headers -->
+                <UniformGrid Rows="1" Columns="7">
+                    <TextBlock Text="Sun" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" />
+                    <TextBlock Text="Mon" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" />
+                    <TextBlock Text="Tue" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" />
+                    <TextBlock Text="Wed" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" />
+                    <TextBlock Text="Thu" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" />
+                    <TextBlock Text="Fri" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" />
+                    <TextBlock Text="Sat" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" />
+                </UniformGrid>
+
+                <ItemsControl Grid.Row="1" ItemsSource="{Binding CalendarDates}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="5" Columns="7" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Margin="0" 
+                                    MouseDown="Border_MouseDown">
+                                <Grid>
+                                    <TextBlock Text="{Binding DisplayDay}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5">
+                                        <ItemsControl ItemsSource="{Binding TaskDots}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Ellipse Width="8" Height="8" Fill="Red" Margin="1" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Grid>
         </Grid>
     </Grid>
